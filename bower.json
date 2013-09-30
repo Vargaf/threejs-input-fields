@@ -1,0 +1,15 @@
+{
+    "name": "threejsInputFields",
+    "version": "0.0.0.1",
+    "ignore": [
+        ".jshintrc",
+        "**/*.txt"
+    ],
+    "dependencies": {
+        "jquery"            : "latest",
+        "backbone-amd"      : "latest",
+        "underscore-amd"    : "latest",
+        "requirejs"         : "latest",
+        "threejs"           : "latest"
+    }
+}
