@@ -39,24 +39,35 @@ require(
         'views/canvasElement',
         'views/exampleObjects',
         'modules/animationController',
+        'inputFields/inputManager',
         'jquery'
     ],
     function(
         CanvasElementClass,
         ExampleObjectsClass,
         AnimationControllerClass,
+        InputManagerClass,
         $ )
     {
 
-    var animationController = new AnimationControllerClass();
+        var animationController = new AnimationControllerClass();
 
-    var mainCanvas = new CanvasElementClass( { el: $( "body" ) } );
+        var mainCanvas = new CanvasElementClass( { el: $( "body" ) } );
 
-    var exampleObjects = new ExampleObjectsClass();
+        var exampleObjects = new ExampleObjectsClass();
+        mainCanvas.add( exampleObjects.getObjects() );
 
-    mainCanvas.add( exampleObjects.getObjects() );
+        var inputManager = new InputManagerClass();
+        inputManager.create( 'text', 'first-text' );
 
-    animationController.add( mainCanvas );
+        var firstTextInput = inputManager.getInput( 'first-text').setValue( 'Hola mundo').setUseScreenCoordinates( true );
+        mainCanvas.refreshElement( firstTextInput.getElement() );
 
-    animationController.animate();
+        animationController.add( mainCanvas );
+
+        animationController.animate();
+
+        $( "body").onkeyup( function(){
+
+        } );
 });

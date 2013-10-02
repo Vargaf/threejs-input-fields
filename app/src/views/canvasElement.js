@@ -78,6 +78,24 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
         },
 
+        refreshElement: function( object, objectId ) {
+
+            var element = this.scene.getObjectById( objectId );
+
+            if( typeof element == undefined ) {
+
+                element == object;
+
+            } else {
+
+                this.scene.remove( element );
+
+            }
+
+            this.add( element );
+
+        },
+
         animate: function( objectItself ) {
 
             window.requestAnimationFrame( this.animate, objectItself );

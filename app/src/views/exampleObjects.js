@@ -43,7 +43,7 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             var cubeGeometry = new THREE.CubeGeometry( 100, 100, 100 );
             var cubeMaterial = new THREE.MeshNormalMaterial();
             cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
-            cube.position.set(0,0,0);
+            cube.position.set(0,50,0);
             cube.name = "Cube";
             group.add(cube);
 
