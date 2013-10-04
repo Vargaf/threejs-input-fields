@@ -10,6 +10,7 @@
         "backbone-amd"      : "latest",
         "underscore-amd"    : "latest",
         "requirejs"         : "latest",
-        "threejs"           : "latest"
+        "threejs"           : "latest",
+        "mousetrap"         : "latest"
     }
 }

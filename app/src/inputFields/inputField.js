@@ -13,12 +13,20 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
     var inputFieldClass = Backbone.View.extend({
 
         value                           :   '',
+        inputType                            :   '',
 
         spriteInputFieldElement         :   '',
         isDirty                         :   true,
         size                            :   10,
         textIndex                       :   0,
         useScreenCoordinates            :   false,
+        canvasContainer                 :   '',
+
+        initialize: function() {
+
+            this.canvasContainer = this.options.canvas;
+
+        },
 
         /**
          *
@@ -28,7 +36,13 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         drawSpriteInputFieldElement: function() {
 
-            console.error ( "There is an object that doesn't rewrites the 'drawSpriteInputFieldElement' function" );
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'drawSpriteInputFieldElement' function" );
+
+        },
+
+        addKeyDownValue: function( value ) {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'addKeyDownValue' function" );
 
         },
 
@@ -44,6 +58,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                 this.drawSpriteInputFieldElement();
             }
 
+            this.isDirty = false;
             return this.spriteInputFieldElement;
 
         },
@@ -52,6 +67,33 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
             this.value = value;
             return this;
+        },
+
+        getInputType: function() {
+
+            if( this.inputType == '' ) {
+                var inputClass = typeof this;
+                console.error ( "-- " + inputClass + " -- Doesn't have defined its input type." );
+                return false;
+            }
+
+            return this.inputType;
+
+        },
+
+        setSize: function( size ) {
+
+            this.isDirty = true;
+            this.size = size;
+
+            return this;
+        },
+
+        setUseScreenCoordinates: function( value ) {
+
+            this.useScreenCoordinates = value;
+            return this;
+
         },
 
         /**
@@ -86,16 +128,29 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             var context = canvas.getContext('2d');
             context.font = "Bold " + fontsize + "px " + fontface;
 
-            // Cut the message to fit the size
-            if( ( message.length - this.textIndex ) > this.size ) {
+            // Get the max size available to the input
+            var maxCharacterMessage = '';
+            for( var i = 0; i < this.size; i++ ) {
+                maxCharacterMessage += 'm';
+            }
+            var maxWidth = context.measureText( maxCharacterMessage ).width;
 
-                message = message.substring( this.textIndex, this.size );
+            // Cut the message to fit the maxWidth
+            var actualMessage = message;
+            var textWidth = context.measureText( message ).width;
+            var newLenght = 0;
+            if( textWidth > maxWidth ) {
+                textWidth = 0;
+                while( textWidth < maxWidth ) {
 
+                    newLenght++;
+                    message = actualMessage.substring( actualMessage.length - newLenght, actualMessage.length );
+                    textWidth = context.measureText( message ).width;
+
+                }
+                message = actualMessage.substring( actualMessage.length - newLenght + 1, actualMessage.length );
             }
 
-            // get size data (height depends only on font size)
-            var metrics = context.measureText( message );
-            var textWidth = metrics.width;
 
             // background color
             context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + ","
@@ -106,7 +161,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
             context.lineWidth = borderThickness;
 
-            this.roundRect(context, borderThickness/2, borderThickness/2, textWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
+            this.roundRect(context, borderThickness/2, borderThickness/2, maxWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
             // 1.4 is extra height factor for text below baseline: g,j,p,q.
 
             // text color
@@ -121,23 +176,8 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             var spriteMaterial = new THREE.SpriteMaterial(
                 { map: texture, useScreenCoordinates: this.useScreenCoordinates, alignment: spriteAlignment } );
             var sprite = new THREE.Sprite( spriteMaterial );
-            sprite.scale.set( textWidth + ( borderThickness * 2 ), fontsize * 1.4 + borderThickness + ( borderThickness * 2 ));
+            sprite.scale.set( maxWidth + ( borderThickness * 2 ), fontsize * 1.4 + borderThickness + ( borderThickness * 2 ));
             return sprite;
-        },
-
-        setSize: function( size ) {
-
-            this.isDirty = true;
-            this.size = size;
-
-            return this;
-        },
-
-        setUseScreenCoordinates: function( value ) {
-
-            this.useScreenCoordinates = value;
-            return this;
-
         },
 
         // function for drawing rounded rectangles

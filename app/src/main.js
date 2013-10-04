@@ -17,7 +17,8 @@ require.config({
 
         "threejs"               : "../vendors/threejs/build/three.min",
         "detector"              : "../vendors/threejs/examples/js/Detector",
-        "orbitControls"          : "../vendors/threejs/examples/js/controls/OrbitControls"
+        "orbitControls"         : "../vendors/threejs/examples/js/controls/OrbitControls",
+        "mousetrap"             : "../vendors/mousetrap/mousetrap.min"
     },
 
     // Sets the configuration for your third party scripts that are not AMD compatible
@@ -49,7 +50,6 @@ require(
         InputManagerClass,
         $ )
     {
-
         var animationController = new AnimationControllerClass();
 
         var mainCanvas = new CanvasElementClass( { el: $( "body" ) } );
@@ -58,16 +58,13 @@ require(
         mainCanvas.add( exampleObjects.getObjects() );
 
         var inputManager = new InputManagerClass();
-        inputManager.create( 'text', 'first-text' );
+        inputManager.create( 'text', 'first-text', mainCanvas );
 
         var firstTextInput = inputManager.getInput( 'first-text').setValue( 'Hola mundo').setUseScreenCoordinates( true );
-        mainCanvas.refreshElement( firstTextInput.getElement() );
+        mainCanvas.add( firstTextInput.getElement() );
 
         animationController.add( mainCanvas );
+        animationController.add( inputManager );
 
         animationController.animate();
-
-        $( "body").onkeyup( function(){
-
-        } );
 });

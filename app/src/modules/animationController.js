@@ -18,7 +18,7 @@ define([ 'backbone' ], function( Backbone ) {
 
             this.attributes.elementsToRender = [];
 
-            animationControllerClassThat = this;
+            animationControllerClassTHIS = this;
 
         },
 
@@ -37,14 +37,13 @@ define([ 'backbone' ], function( Backbone ) {
 
         animate: function() {
 
-            requestAnimationFrame( animationControllerClassThat.animate );
+            requestAnimationFrame( animationControllerClassTHIS.animate );
 
             var element;
-            for( var index in animationControllerClassThat.attributes.elementsToRender ) {
+            for( var index in animationControllerClassTHIS.attributes.elementsToRender ) {
 
-                element = animationControllerClassThat.attributes.elementsToRender[ index ];
-                element.renderCanvas();
-                element.update();
+                element = animationControllerClassTHIS.attributes.elementsToRender[ index ];
+                element.requestAnimationFrame();
 
             }
         }

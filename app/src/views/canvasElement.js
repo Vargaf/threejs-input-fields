@@ -82,17 +82,13 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
             var element = this.scene.getObjectById( objectId );
 
-            if( typeof element == undefined ) {
-
-                element == object;
-
-            } else {
+            if( typeof element != undefined ) {
 
                 this.scene.remove( element );
 
             }
 
-            this.add( element );
+            this.add( object );
 
         },
 
@@ -113,6 +109,12 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
             this.renderer.render( this.scene, this.camera );
 
+        },
+
+        requestAnimationFrame: function() {
+
+            this.renderCanvas();
+            this.update();
         }
 
 

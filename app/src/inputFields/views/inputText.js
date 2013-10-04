@@ -16,6 +16,8 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             InputFieldClass.prototype.initialize.apply(this, arguments);
 
+            this.inputType = 'text';
+
         },
 
         drawSpriteInputFieldElement: function() {
@@ -24,8 +26,17 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
                 { fontsize: 24, borderColor: {r:255, g:0, b:0, a:1.0}, backgroundColor: {r:255, g:100, b:100, a:0.8} } );
 
             sprite.position.set( 100, 100, 0 );
+            sprite.id = this.id;
 
             this.spriteInputFieldElement = sprite;
+
+        },
+
+        addKeyDownValue: function( value ) {
+
+            this.value += value;
+            this.isDirty = true;
+            return this;
 
         }
 
