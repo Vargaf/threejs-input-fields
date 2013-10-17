@@ -62,7 +62,8 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
             $( canvasElement).addClass( this.className );
 
-            this.$el.html( canvasElement );
+            //this.$el.html( canvasElement );
+            $( "body" ).append( canvasElement );
         },
 
         add: function( object ) {

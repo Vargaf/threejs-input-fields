@@ -12,12 +12,16 @@
 define(
     [
         'backbone',
+        'threejs',
         'inputFields/views/inputText',
+        'inputFields/views/inputCursor',
         'mousetrap'
     ],
     function(
         Backbone,
+        THREE,
         InputText,
+        InputCursor,
         Mousetrap
         ) {
 
@@ -32,6 +36,7 @@ define(
         isShiftPress                :   false,
         isCapsLocked                :   false,
         ignoreKey                   :   false,
+        cursorElement               :   false,
 
         initialize: function() {
 
@@ -57,6 +62,8 @@ define(
 
             Mousetrap.bind( 'shift',      inputManagerClassTHIS.shiftPress, 'keypress' );
             Mousetrap.bind( 'shift',      inputManagerClassTHIS.shiftRelease, 'keyup' );
+
+
 
         },
 
@@ -134,6 +141,8 @@ define(
 
             this.focusedElement = inputId;
 
+            console.log( this.inputsLoaded[ inputId ] );
+
             return inputFieldExists;
         },
 
@@ -160,23 +169,32 @@ define(
          */
         requestAnimationFrame: function() {
 
-            if( this.inputsLoaded[ this.focusedElement ].isDirty ) {
+            var focusedInput = this.inputsLoaded[ this.focusedElement ];
+            if( focusedInput.isDirty ) {
 
-                var focusedElement          = this.inputsLoaded[ this.focusedElement ];
-                var inputType               = focusedElement.getInputType();
-                var inputId                 = focusedElement.id;
-                var canvasContainer         = focusedElement.canvasContainer;
-                var inputValue              = focusedElement.value;
-                var useScreenCoordinates    = focusedElement.useScreenCoordinates;
+                focusedInput.canvasContainer.refreshElement( focusedInput.getElement(), focusedInput.id );
 
-                delete (this.inputsLoaded[ this.focusedElement ]);
+                if( focusedInput.hasCursor() ) {
 
-                this.create( inputType, inputId, canvasContainer );
-                var newElement = this.getInput( inputId );
-                newElement.setValue( inputValue );
-                newElement.setUseScreenCoordinates( useScreenCoordinates );
+                    this.cursorElement.moveCursor( focusedInput );
 
-                newElement.canvasContainer.refreshElement( newElement.getElement(), focusedElement.id );
+                }
+            }
+
+            // Show the text cursor if it is needed
+            focusedInput = this.inputsLoaded[ this.focusedElement ];
+            if( focusedInput.inputType == 'text' ) {
+
+                if( focusedInput.hasCursor() ) {
+
+                    if( this.cursorElement === false ) {
+                        this.cursorElement = new InputCursor();
+                    }
+
+                    this.cursorElement.blink( focusedInput );
+
+                }
+
             }
 
         }

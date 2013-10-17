@@ -15,7 +15,7 @@ require.config({
         "backbone"              : "../vendors/backbone-amd/backbone",
         "underscore"            : "../vendors/underscore-amd/underscore",
 
-        "threejs"               : "../vendors/threejs/build/three.min",
+        "threejs"               : "../vendors/threejs/build/three",
         "detector"              : "../vendors/threejs/examples/js/Detector",
         "orbitControls"         : "../vendors/threejs/examples/js/controls/OrbitControls",
         "mousetrap"             : "../vendors/mousetrap/mousetrap.min"
@@ -30,6 +30,7 @@ require.config({
             exports: "Detector"  //attaches "THREE" to the window object
         },
         "orbitControls": {
+            deps: [ "threejs" ],
             exports: "OrbitControls"  //attaches "THREE" to the window object
         }
     } // end Shim Configuration
@@ -60,7 +61,12 @@ require(
         var inputManager = new InputManagerClass();
         inputManager.create( 'text', 'first-text', mainCanvas );
 
-        var firstTextInput = inputManager.getInput( 'first-text').setValue( 'Hola mundo').setUseScreenCoordinates( true );
+        var firstTextInput = inputManager.getInput( 'first-text')
+            .setValue( 'Hola mundo' )
+            .setUseScreenCoordinates( true )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputPosition( 100, 100, 0 );
         mainCanvas.add( firstTextInput.getElement() );
 
         animationController.add( mainCanvas );

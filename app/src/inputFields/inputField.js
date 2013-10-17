@@ -13,14 +13,13 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
     var inputFieldClass = Backbone.View.extend({
 
         value                           :   '',
-        inputType                            :   '',
-
+        inputType                       :   '',
         spriteInputFieldElement         :   '',
         isDirty                         :   true,
         size                            :   10,
-        textIndex                       :   0,
         useScreenCoordinates            :   false,
         canvasContainer                 :   '',
+        inputPosition                  :   { x: 0, y: 0, z: 0 },
 
         initialize: function() {
 
@@ -46,6 +45,24 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        hasCursor: function() {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'hasCursor' function" );
+            return false;
+        },
+
+        initializeInputTextCursorPosition: function() {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'initializeInputCursorPosition' function" );
+
+        },
+
+        calculateInputCursorPosition: function() {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'calculateInputCursorPosition' function" );
+
+        },
+
         /**
          *
          * Public methods
@@ -66,6 +83,11 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         setValue: function( value ) {
 
             this.value = value;
+
+            if( this.hasCursor() ) {
+                this.initializeInputTextCursorPosition();
+            }
+
             return this;
         },
 
@@ -96,105 +118,17 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
-        /**
-         *
-         * Helper methods
-         *
-         */
+        setInputPosition: function( px, py, pz) {
 
-        makeTextSprite: function( message, parameters ) {
+            this.inputPosition = { x: px, y: py, z: pz };
+            return this;
 
-            if ( parameters === undefined ) parameters = {};
-
-            var fontface = parameters.hasOwnProperty("fontface") ?
-                parameters["fontface"] : "Arial";
-
-            var fontsize = parameters.hasOwnProperty("fontsize") ?
-                parameters["fontsize"] : 18;
-
-            var borderThickness = parameters.hasOwnProperty("borderThickness") ?
-                parameters["borderThickness"] : 4;
-
-            var borderColor = parameters.hasOwnProperty("borderColor") ?
-                parameters["borderColor"] : { r:0, g:0, b:0, a:1.0 };
-
-            var backgroundColor = parameters.hasOwnProperty("backgroundColor") ?
-                parameters["backgroundColor"] : { r:255, g:255, b:255, a:1.0 };
-
-            var spriteAlignment = parameters.hasOwnProperty( "spriteAlignment" ) ?
-                parameters[ "spriteAlignment" ] : THREE.SpriteAlignment.topLeft;
-
-            var canvas = document.createElement('canvas');
-            var context = canvas.getContext('2d');
-            context.font = "Bold " + fontsize + "px " + fontface;
-
-            // Get the max size available to the input
-            var maxCharacterMessage = '';
-            for( var i = 0; i < this.size; i++ ) {
-                maxCharacterMessage += 'm';
-            }
-            var maxWidth = context.measureText( maxCharacterMessage ).width;
-
-            // Cut the message to fit the maxWidth
-            var actualMessage = message;
-            var textWidth = context.measureText( message ).width;
-            var newLenght = 0;
-            if( textWidth > maxWidth ) {
-                textWidth = 0;
-                while( textWidth < maxWidth ) {
-
-                    newLenght++;
-                    message = actualMessage.substring( actualMessage.length - newLenght, actualMessage.length );
-                    textWidth = context.measureText( message ).width;
-
-                }
-                message = actualMessage.substring( actualMessage.length - newLenght + 1, actualMessage.length );
-            }
-
-
-            // background color
-            context.fillStyle   = "rgba(" + backgroundColor.r + "," + backgroundColor.g + ","
-                + backgroundColor.b + "," + backgroundColor.a + ")";
-            // border color
-            context.strokeStyle = "rgba(" + borderColor.r + "," + borderColor.g + ","
-                + borderColor.b + "," + borderColor.a + ")";
-
-            context.lineWidth = borderThickness;
-
-            this.roundRect(context, borderThickness/2, borderThickness/2, maxWidth + borderThickness, fontsize * 1.4 + borderThickness, 6);
-            // 1.4 is extra height factor for text below baseline: g,j,p,q.
-
-            // text color
-            context.fillStyle = "rgba(0, 0, 0, 1.0)";
-
-            context.fillText( message, borderThickness, fontsize + borderThickness);
-
-            // canvas contents will be used for a texture
-            var texture = new THREE.Texture(canvas)
-            texture.needsUpdate = true;
-
-            var spriteMaterial = new THREE.SpriteMaterial(
-                { map: texture, useScreenCoordinates: this.useScreenCoordinates, alignment: spriteAlignment } );
-            var sprite = new THREE.Sprite( spriteMaterial );
-            sprite.scale.set( maxWidth + ( borderThickness * 2 ), fontsize * 1.4 + borderThickness + ( borderThickness * 2 ));
-            return sprite;
         },
 
-        // function for drawing rounded rectangles
-        roundRect: function( ctx, x, y, w, h, r ) {
-            ctx.beginPath();
-            ctx.moveTo(x+r, y);
-            ctx.lineTo(x+w-r, y);
-            ctx.quadraticCurveTo(x+w, y, x+w, y+r);
-            ctx.lineTo(x+w, y+h-r);
-            ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
-            ctx.lineTo(x+r, y+h);
-            ctx.quadraticCurveTo(x, y+h, x, y+h-r);
-            ctx.lineTo(x, y+r);
-            ctx.quadraticCurveTo(x, y, x+r, y);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
+        getInputPosition: function() {
+
+            return this.inputPosition;
+
         }
 
     });
