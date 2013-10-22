@@ -58,10 +58,14 @@ define(
                     inputManagerClassTHIS.ignoreKey = false;
                 }
 
+                inputManagerClassTHIS.ignoreKey = false;
             });
 
             Mousetrap.bind( 'shift',      inputManagerClassTHIS.shiftPress, 'keypress' );
             Mousetrap.bind( 'shift',      inputManagerClassTHIS.shiftRelease, 'keyup' );
+
+            Mousetrap.bind( 'left',       inputManagerClassTHIS.cursorDisplace );
+            Mousetrap.bind( 'right',      inputManagerClassTHIS.cursorDisplace );
 
 
 
@@ -102,6 +106,25 @@ define(
             }
 
             return inputManagerClassTHIS.isCapsLocked || inputManagerClassTHIS.isShiftPress || false;
+        },
+
+        cursorDisplace: function( event ) {
+
+            inputManagerClassTHIS.ignoreKey = true;
+
+            if( inputManagerClassTHIS.thereIsAFocusedElement() ) {
+
+                var focusedElement = inputManagerClassTHIS.inputsLoaded[ inputManagerClassTHIS.focusedElement ];
+
+                if( event.keyCode == 39 ) {             // LEFT
+                    focusedElement.setCursorTextPosition( focusedElement.getCursorTextPosition() + 1 );
+                } else if( event.keyCode == 37 ) {      // RIGHT
+                    focusedElement.setCursorTextPosition( focusedElement.getCursorTextPosition() - 1 );
+                }
+
+                inputManagerClassTHIS.cursorElement.moveCursor( focusedElement );
+
+            }
         },
 
         /**
@@ -161,6 +184,16 @@ define(
         addKeyDownValue: function( value ) {
 
             this.inputsLoaded[ this.focusedElement ].addKeyDownValue( value );
+
+        },
+
+        thereIsAFocusedElement: function() {
+
+            if( this.focusedElement != '' ){
+                return true;
+            } else {
+                return false;
+            }
 
         },
 

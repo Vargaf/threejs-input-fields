@@ -31,6 +31,8 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         cursorPosition                  :   0,
         cursorTextPosition              :   0,
 
+        context                         :   '',
+
         initialize: function() {
 
             InputFieldClass.prototype.initialize.apply(this, arguments);
@@ -189,7 +191,15 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         setCursorTextPosition: function( position ) {
 
+            if( position < 0 ) {
+                position = 0;
+            } else if( position > this.getInputValue().length ) {
+                position = this.getInputValue().length;
+            }
+
+            console.log( "Cursor position: " + position );
             this.cursorTextPosition = position;
+            this.calculateInputCursorPosition( this.context, this.value );
 
             return this;
 
@@ -203,7 +213,6 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         setTextPositionX: function( position_x ) {
             this.textPositionX = position_x;
-
             return this;
         },
 
@@ -214,6 +223,10 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             }
 
             return this.textPositionX;
+        },
+
+        getInputValue: function() {
+            return this.value;
         },
 
         /**
@@ -256,6 +269,9 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             var tmpMessage = message.substring( 0, this.getCursorTextPosition() );
             var position_x = context.measureText( tmpMessage ).width + this.getTextOffsetX() + this.getInputPosition().x;
+
+            console.log( "Cursor position x: " + position_x );
+
             this.setCursorPosition( position_x );
 
         },
@@ -279,6 +295,8 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             var context = canvas.getContext('2d');
             context.font = this.getFontSize() + 'px ' + this.getFontFamily();
             context.textBaseline = "top";
+
+            this.context = context;
 
             this.roundRect( context, borderThickness / 2, borderThickness, this.getInputFieldSize() - borderThickness / 2 - 1, this.getFontSize() + borderThickness * 2, this.getBorderRadius() );
             this.setInputTextValue( context, message );
