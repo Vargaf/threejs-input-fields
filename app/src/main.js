@@ -66,7 +66,7 @@ require(
             .setUseScreenCoordinates( true )
             .setFontSize( 20 )
             .setBorderSize( 2 )
-            .setInputPosition( 100, 100, 0 );
+            .setInputPosition( 10, 10, 0 );
         mainCanvas.add( firstTextInput.getElement() );
 
         animationController.add( mainCanvas );

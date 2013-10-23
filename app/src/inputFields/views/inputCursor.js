@@ -81,9 +81,8 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         getCursorPosition: function( inputElement ) {
 
-            //this.positionX = inputElement.getTextOffsetX() + inputElement.getInputPositionX();
-            this.positionX = inputElement.getCursorPosition();
-            this.positionY = inputElement.getTextOffsetY() + inputElement.getInputPosition().y - inputElement.getFontSize() * 0.05;
+            this.positionX = inputElement.getCursorPosition() - 2;
+            this.positionY = inputElement.getInputTextPosition().y + inputElement.getInputPosition().y - inputElement.getFontSize() * 0.05;
 
         }
 

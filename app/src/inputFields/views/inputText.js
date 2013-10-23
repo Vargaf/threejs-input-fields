@@ -14,7 +14,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         fontSize                        :   18,
         fontFamily                      :   'Arial',
-        fontcolor                       :   { r:0, g:0, b:0, a:1.0 },
+        fontColor                       :   { r:0, g:0, b:0, a:1.0 },
         spriteAlignment                 :   THREE.SpriteAlignment.topLeft,
         borderSize                      :   1,
         borderColor                     :   { r:0, g:0, b:0, a:1.0 },
@@ -24,12 +24,15 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         textIndex                       :   0,
         currentMessageWidth             :   0,
         inputFieldSize                  :   200,
-        textOffsetX                     :   0,
-        textOffsetY                     :   0,
-        textPositionX                   :   0,
 
         cursorPosition                  :   0,
         cursorTextPosition              :   0,
+
+        // To know where the text is as an offset of the input field position
+        inputTextPosition               :   { x: 0, y: 0, z: 0 },
+
+        inputTextBorderOffset           :   2,
+        inputTextBorderOffsetFactor     :   2,
 
         context                         :   '',
 
@@ -80,12 +83,12 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         },
 
         setFontColor: function( red, green, blue, alpha ) {
-            this.fontcolor = { r: red, g: green, b: blue, a: alpha };
+            this.fontColor = { r: red, g: green, b: blue, a: alpha };
             return this;
         },
 
         getFontColor: function() {
-            return this.fontcolor;
+            return this.fontColor;
         },
 
         getSpriteAlignment: function() {
@@ -99,6 +102,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             }
 
             this.borderSize = size;
+            this.resetBorderOffset();
             return this;
         },
 
@@ -133,36 +137,29 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             return this.inputFieldSize;
         },
 
-        setTextOffsetX: function( offset ) {
+        setInputTextBorderOffsetFactor: function( factor ) {
 
-            this.textOffsetX = offset + this.getBorderSize() * 2;
-
-            return this;
-        },
-
-        getTextOffsetX: function() {
-
-            if( this.textOffsetX == 0 ) {
-                this.textOffsetX = this.getBorderSize() * 2;
-            }
-
-            return this.textOffsetX;
-        },
-
-        setTextOffsetY: function( offset ) {
-
-            this.textOffsetY = offset + this.getBorderSize() * 2;
+            this.inputTextBorderOffsetFactor = factor;
 
             return this;
         },
 
-        getTextOffsetY: function() {
+        getInputTextBorderOffsetFactor: function() {
 
-            if( this.textOffsetY == 0 ) {
-                this.textOffsetY = this.getBorderSize() * 2;
-            }
+            return this.inputTextBorderOffsetFactor;
+        },
 
-            return this.textOffsetY;
+        resetBorderOffset: function() {
+
+            this.inputTextBorderOffset = this.getBorderSize() * this.getInputTextBorderOffsetFactor();
+
+            return this;
+        },
+
+        getBorderOffset: function() {
+
+            return this.inputTextBorderOffset;
+
         },
 
         setCursorPosition: function( position ) {
@@ -211,18 +208,44 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         },
 
-        setTextPositionX: function( position_x ) {
-            this.textPositionX = position_x;
+        setInputTextPosition: function( xp, yp, zp ) {
+
+            this.inputTextPosition = { x: xp, y: yp, z: zp };
+
             return this;
         },
 
-        getTextPositionX: function() {
+        setInputTextPositionX: function( xp ) {
 
-            if( this.textPositionX == 0 ) {
-                return this.getTextOffsetX();
-            }
+            this.inputTextPosition.x = xp;
 
-            return this.textPositionX;
+            return this;
+        },
+
+        setInputTextPositionY: function( yp ) {
+
+            this.inputTextPosition.y = yp;
+
+            return this;
+        },
+
+        setInputTextPositionZ: function( zp ) {
+
+            this.inputTextPosition.z = zp;
+
+            return this;
+        },
+
+        getInputTextPosition: function() {
+
+            var inputTextPosition = { x: 0, y: 0, z: 0 };
+
+            inputTextPosition.x = this.inputTextPosition.x + this.getBorderSize() * 2;
+            inputTextPosition.y = this.inputTextPosition.y + this.getBorderSize() * 2;
+            inputTextPosition.z = this.inputTextPosition.z;
+
+            return inputTextPosition;
+
         },
 
         getInputValue: function() {
@@ -268,7 +291,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         calculateInputCursorPosition: function( context, message ) {
 
             var tmpMessage = message.substring( 0, this.getCursorTextPosition() );
-            var position_x = context.measureText( tmpMessage ).width + this.getTextOffsetX() + this.getInputPosition().x;
+            var position_x = context.measureText( tmpMessage ).width + this.getInputTextPosition().x + this.getInputPosition().x;
 
             console.log( "Cursor position x: " + position_x );
 
@@ -351,16 +374,16 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             this.displaceInputValue( context, message );
             this.calculateInputCursorPosition( context, message );
 
-            context.fillStyle = "rgba(" + this.fontcolor.r + ", " + this.fontcolor.g + ", " + this.fontcolor.b + ", " + this.fontcolor.a + ")";
-            context.fillText( message, this.getTextPositionX(), this.getTextOffsetY() );
+            context.fillStyle = "rgba(" + this.fontColor.r + ", " + this.fontColor.g + ", " + this.fontColor.b + ", " + this.fontColor.a + ")";
+            context.fillText( message, this.getInputTextPosition().x, this.getInputTextPosition().y );
         },
 
         displaceInputValue: function( context, message ) {
 
-            var textWidth = context.measureText( message ).width + this.getBorderSize() * 2;
+            var textWidth = context.measureText( message ).width + this.getBorderOffset() * 2;
 
             if( textWidth > this.getInputFieldSize() ) {
-                this.setTextPositionX( this.getInputFieldSize() - textWidth );
+                this.setInputTextPositionX( this.getInputFieldSize() - textWidth );
             }
 
         }

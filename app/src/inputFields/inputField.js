@@ -19,7 +19,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         size                            :   10,
         useScreenCoordinates            :   false,
         canvasContainer                 :   '',
-        inputPosition                  :   { x: 0, y: 0, z: 0 },
+        inputPosition                   :   { x: 0, y: 0, z: 0 },
 
         initialize: function() {
 
