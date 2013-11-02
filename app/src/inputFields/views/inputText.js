@@ -35,6 +35,9 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         inputTextBorderOffsetFactor     :   2,
 
         context                         :   '',
+        canvas                          :   '',
+
+        inputCanvasId                   :   '',
 
         initialize: function() {
 
@@ -43,6 +46,17 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             this.inputType = 'text';
 
             this.setCursorPosition( 0 );
+
+            var canvas = document.createElement('canvas');
+            canvas.width = this.getInputFieldSize();
+            canvas.height = this.getInputFieldSize();
+
+            var context = canvas.getContext('2d');
+            context.font = this.getFontSize() + 'px ' + this.getFontFamily();
+            context.textBaseline = "top";
+
+            this.context = context;
+            this.canvas = canvas;
         },
 
         /**
@@ -194,7 +208,6 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
                 position = this.getInputValue().length;
             }
 
-            console.log( "Cursor position: " + position );
             this.cursorTextPosition = position;
             this.calculateInputCursorPosition( this.context, this.value );
 
@@ -262,10 +275,12 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             var sprite = this.makeTextSprite( this.value );
 
-            sprite.position.set( this.getInputPosition().x, this.getInputPosition().y, this.getInputPosition().z );
-            sprite.id = this.id;
+            if( sprite !== false ) {
+                sprite.position.set( this.getInputPosition().x, this.getInputPosition().y, this.getInputPosition().z );
+                sprite.id = this.id;
 
-            this.spriteInputFieldElement = sprite;
+                this.spriteInputFieldElement = sprite;
+            }
 
         },
 
@@ -293,8 +308,6 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             var tmpMessage = message.substring( 0, this.getCursorTextPosition() );
             var position_x = context.measureText( tmpMessage ).width + this.getInputTextPosition().x + this.getInputPosition().x;
 
-            console.log( "Cursor position x: " + position_x );
-
             this.setCursorPosition( position_x );
 
         },
@@ -306,20 +319,12 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
          */
         makeTextSprite: function( message ) {
 
-            // Remove the old sprite value if there was any
-            delete( this.spriteInputFieldElement );
+            console.log( message );
 
             var borderThickness = this.getBorderSize();
 
-            var canvas = document.createElement('canvas');
-            canvas.width = this.getInputFieldSize();
-            canvas.height = this.getInputFieldSize();
-
-            var context = canvas.getContext('2d');
-            context.font = this.getFontSize() + 'px ' + this.getFontFamily();
-            context.textBaseline = "top";
-
-            this.context = context;
+            var context = this.context;
+            var canvas = this.canvas;
 
             this.roundRect( context, borderThickness / 2, borderThickness, this.getInputFieldSize() - borderThickness / 2 - 1, this.getFontSize() + borderThickness * 2, this.getBorderRadius() );
             this.setInputTextValue( context, message );
@@ -327,10 +332,25 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             var texture = new THREE.Texture(canvas)
             texture.needsUpdate = true;
 
-            var spriteMaterial = new THREE.SpriteMaterial(
-                { map: texture, transparent: true, useScreenCoordinates: true, alignment: this.getSpriteAlignment() } );
-            var sprite = new THREE.Sprite( spriteMaterial );
-            sprite.scale.set( this.getInputFieldSize(), this.getInputFieldSize(), 0 );
+            var sprite = false;
+
+            if( this.inputCanvasId === '' ) {
+
+                var spriteMaterial = new THREE.SpriteMaterial(
+                    { map: texture, transparent: true, useScreenCoordinates: true, alignment: this.getSpriteAlignment() } );
+
+                sprite = new THREE.Sprite( spriteMaterial );
+
+                this.inputCanvasId = 'inputText-' + ( Math.round( Math.random() * 100000000 ) );
+                sprite.name = this.inputCanvasId;
+                sprite.scale.set( this.getInputFieldSize(), this.getInputFieldSize(), 0 );
+
+            } else {
+
+                this.spriteInputFieldElement.material.map = texture;
+
+            }
+
             return sprite;
         },
 

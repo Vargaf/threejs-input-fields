@@ -164,8 +164,6 @@ define(
 
             this.focusedElement = inputId;
 
-            console.log( this.inputsLoaded[ inputId ] );
-
             return inputFieldExists;
         },
 
@@ -205,7 +203,8 @@ define(
             var focusedInput = this.inputsLoaded[ this.focusedElement ];
             if( focusedInput.isDirty ) {
 
-                focusedInput.canvasContainer.refreshElement( focusedInput.getElement(), focusedInput.id );
+                //focusedInput.canvasContainer.refreshElement( focusedInput.getElement(), focusedInput.id );
+                focusedInput.drawSpriteInputFieldElement();
 
                 if( focusedInput.hasCursor() ) {
 
