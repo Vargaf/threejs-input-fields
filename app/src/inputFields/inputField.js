@@ -57,12 +57,6 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
-        calculateInputCursorPosition: function() {
-
-            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'calculateInputCursorPosition' function" );
-
-        },
-
         /**
          *
          * Public methods

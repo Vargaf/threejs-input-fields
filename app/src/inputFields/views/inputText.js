@@ -208,10 +208,31 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
                 position = this.getInputValue().length;
             }
 
+            var xCoordinatePosition = this.getInputCursorPositionXCoordinate( position, this.getInputValue() );
+
+            if( xCoordinatePosition > this.getInputPosition().x + this.getInputFieldSize() - this.getBorderSize() * 3 ) {
+
+                xCoordinatePosition = this.getInputPosition().x + this.getInputFieldSize() - this.getBorderSize() * 3;
+
+            } else if( xCoordinatePosition < this.getInputPosition().x + this.getBorderSize() * 2 ) {
+
+                xCoordinatePosition = this.getInputPosition().x + this.getBorderSize() * 2;
+
+            }
+
+            this.cursorPosition = xCoordinatePosition;
             this.cursorTextPosition = position;
-            this.calculateInputCursorPosition( this.context, this.value );
 
             return this;
+
+        },
+
+        getInputCursorPositionXCoordinate: function( position, message ) {
+
+            var tmpMessage = message.substring( 0, position );
+            var position_x = this.context.measureText( tmpMessage ).width + this.getInputTextPosition().x + this.getInputPosition().x;
+
+            return position_x;
 
         },
 
@@ -265,6 +286,18 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             return this.value;
         },
 
+        setValue: function( value ) {
+
+            this.value = value;
+            this.cursorTextPosition = value.length;
+
+            if( this.hasCursor() ) {
+                this.initializeInputTextCursorPosition();
+            }
+
+            return this;
+        },
+
         /**
          *
          * Abstract methods
@@ -282,11 +315,21 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
                 this.spriteInputFieldElement = sprite;
             }
 
+            this.isDirty = false;
+
         },
 
         addKeyDownValue: function( value ) {
 
-            this.value += value;
+            if( this.getCursorTextPosition() != this.getInputValue().length ) {
+                this.value =
+                    this.value.substring( 0, this.getCursorTextPosition() ) +
+                    value +
+                    this.value.substring( this.getCursorTextPosition(), this.getInputValue().length );
+            } else {
+                this.value += value;
+            }
+
             this.cursorTextPosition++;
             this.isDirty = true;
             return this;
@@ -303,23 +346,12 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         },
 
-        calculateInputCursorPosition: function( context, message ) {
-
-            var tmpMessage = message.substring( 0, this.getCursorTextPosition() );
-            var position_x = context.measureText( tmpMessage ).width + this.getInputTextPosition().x + this.getInputPosition().x;
-
-            this.setCursorPosition( position_x );
-
-        },
-
         /**
          *
          * Object methods
          *
          */
         makeTextSprite: function( message ) {
-
-            console.log( message );
 
             var borderThickness = this.getBorderSize();
 
@@ -392,7 +424,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         setInputTextValue: function( context, message ) {
 
             this.displaceInputValue( context, message );
-            this.calculateInputCursorPosition( context, message );
+            this.setCursorTextPosition( this.getCursorTextPosition() );
 
             context.fillStyle = "rgba(" + this.fontColor.r + ", " + this.fontColor.g + ", " + this.fontColor.b + ", " + this.fontColor.a + ")";
             context.fillText( message, this.getInputTextPosition().x, this.getInputTextPosition().y );
@@ -400,7 +432,11 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         displaceInputValue: function( context, message ) {
 
-            var textWidth = context.measureText( message ).width + this.getBorderOffset() * 2;
+            //var textWidth = context.measureText( message ).width + this.getBorderOffset() * 2;
+
+            var tmpMessage = message.substring( 0, this.getCursorTextPosition() );
+            var textWidth = this.context.measureText( tmpMessage ).width + this.getBorderOffset() * 2;// + this.getInputPosition().x;
+
 
             if( textWidth > this.getInputFieldSize() ) {
                 this.setInputTextPositionX( this.getInputFieldSize() - textWidth );

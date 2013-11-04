@@ -54,11 +54,20 @@ define(
                     }
 
                     inputManagerClassTHIS.addKeyDownValue( char );
-                } else {
-                    inputManagerClassTHIS.ignoreKey = false;
                 }
 
                 inputManagerClassTHIS.ignoreKey = false;
+
+                return false;
+            });
+
+            /**
+             * Disable backspace and delete key
+             */
+            $( document ).keydown(function( event ) {
+                if( event.which == 8 || event.which == 46 ) {
+                    return false;
+                }
             });
 
             Mousetrap.bind( 'shift',      inputManagerClassTHIS.shiftPress, 'keypress' );
