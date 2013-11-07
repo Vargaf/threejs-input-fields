@@ -114,6 +114,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         setInputPosition: function( px, py, pz) {
 
+            this.isDirty = true;
             this.inputPosition = { x: px, y: py, z: pz };
             return this;
 
