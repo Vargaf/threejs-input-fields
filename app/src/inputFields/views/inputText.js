@@ -241,10 +241,16 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
                 xCoordinatePosition = min;
 
+                if( ( position - 1 ) > 0 ) {
+                    this.cursorTextPosition--;
+                }
+
                 if( needsToBeCleaned ) {
                     this.isDirty = true;
                     this.makeTextSprite( this.getInputValue() );
                 }
+
+                xCoordinatePosition = this.getInputCursorPositionXCoordinate( position, this.getInputValue() );
             }
             if( needsToBeCleaned ) {
                 this.isDirty = false;
@@ -407,7 +413,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             if( this.inputCanvasId === '' ) {
 
                 var spriteMaterial = new THREE.SpriteMaterial(
-                    { map: texture, transparent: true, useScreenCoordinates: true, alignment: this.getSpriteAlignment() } );
+                    { map: texture, transparent: true, useScreenCoordinates: this.getUseScreenCoordinates(), alignment: this.getSpriteAlignment() } );
 
                 sprite = new THREE.Sprite( spriteMaterial );
 
@@ -474,7 +480,13 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             if( textMovedWith > this.getInputFieldSize() ) {
 
                 this.setInputTextPositionX( this.getInputFieldSize() - textWidth );
+
+            } else if(textMovedWith < ( this.getBorderOffset() * 2 ) ) {
+
+                this.setInputTextPositionX( this.inputTextPosition.x + Math.abs( textMovedWith ) + this.getBorderOffset() * 2);
+
             }
+
         }
 
     });

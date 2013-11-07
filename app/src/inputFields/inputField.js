@@ -112,6 +112,12 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        getUseScreenCoordinates: function() {
+
+            return this.useScreenCoordinates;
+
+        },
+
         setInputPosition: function( px, py, pz) {
 
             this.isDirty = true;
