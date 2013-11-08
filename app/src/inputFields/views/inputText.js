@@ -222,43 +222,42 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             var max = this.getInputPosition().x + this.getInputFieldSize() - this.getBorderSize() * 3;
             var min = this.getInputPosition().x + this.getBorderSize() * 2;
 
-            if( xCoordinatePosition > max ) {
+            if( xCoordinatePosition >= max ) {
 
-                xCoordinatePosition = max;
-
-                if( ( position + 1 ) < this.getInputValue().length ) {
-                    this.cursorTextPosition++;
+                // Displace the text to show the next two or one characters
+                if( ( position + 2 ) <= this.getInputValue().length ) {
+                    this.cursorTextPosition += 2;
+                } else if( ( position + 1 ) <= this.getInputValue().length ) {
+                    this.cursorTextPosition += 1;
                 }
 
-                if( needsToBeCleaned ) {
-                    this.isDirty = true;
-                    this.makeTextSprite( this.getInputValue() );
-                }
+                this.displaceInputValue();
 
                 xCoordinatePosition = this.getInputCursorPositionXCoordinate( position, this.getInputValue() );
 
-            } else if( xCoordinatePosition < min ) {
+            } else if( xCoordinatePosition <= min ) {
 
-                xCoordinatePosition = min;
-
-                if( ( position - 1 ) > 0 ) {
-                    this.cursorTextPosition--;
+                // Displace the text to show the preview two or one characters
+                if( ( position - 2 ) >= 0 ) {
+                    this.cursorTextPosition -= 2;
+                } else if( ( position - 1 ) >= 0 ) {
+                    this.cursorTextPosition -= 1;
                 }
 
-                if( needsToBeCleaned ) {
-                    this.isDirty = true;
-                    this.makeTextSprite( this.getInputValue() );
-                }
+                this.displaceInputValue();
 
                 xCoordinatePosition = this.getInputCursorPositionXCoordinate( position, this.getInputValue() );
-            }
-            if( needsToBeCleaned ) {
-                this.isDirty = false;
             }
 
             // Since we may have displaced the cursor to show more characters is convenient to save the real cursor position again
             this.cursorTextPosition = position;
             this.cursorPosition = xCoordinatePosition;
+
+            if( needsToBeCleaned ) {
+                this.isDirty = true;
+                this.makeTextSprite( this.getInputValue() );
+                this.isDirty = false;
+            }
 
             return this;
 
@@ -468,6 +467,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         setInputTextValue: function( context, message ) {
             context.fillStyle = "rgba(" + this.fontColor.r + ", " + this.fontColor.g + ", " + this.fontColor.b + ", " + this.fontColor.a + ")";
             context.fillText( message, this.getInputTextPosition().x, this.getInputTextPosition().y );
+            this.drawCursor();
         },
 
         displaceInputValue: function() {
@@ -486,6 +486,14 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
                 this.setInputTextPositionX( this.inputTextPosition.x + Math.abs( textMovedWith ) + this.getBorderOffset() * 2);
 
             }
+
+        },
+
+        drawCursor: function() {
+
+            var positionX = this.getCursorPosition() - this.inputPosition.x - 2;
+            var positionY = this.getInputTextPosition().y - this.getFontSize() * 0.05;
+            this.context.fillText( "|", positionX, positionY  );
 
         }
 

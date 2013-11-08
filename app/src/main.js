@@ -63,10 +63,10 @@ require(
 
         var firstTextInput = inputManager.getInput( 'first-text')
             .setValue( 'Hola mundo' )
-            .setUseScreenCoordinates( true )
+            .setUseScreenCoordinates( false )
             .setFontSize( 20 )
             .setBorderSize( 2 )
-            .setInputPosition( 10, 10, 0 );
+            .setInputPosition( 100, 100, 0 );
         mainCanvas.add( firstTextInput.getElement() );
 
         animationController.add( mainCanvas );
