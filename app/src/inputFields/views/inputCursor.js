@@ -21,6 +21,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         positionX                   :   0,
         positionY                   :   0,
+        visible                     :   false,
 
         initialize: function() {
 
@@ -52,24 +53,28 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 //            this.moveCursor( inputElement );
 //            inputElement.canvasContainer.add( this.cursorSprite );
 
+            if( this.visible ) {
+                var positionX = inputElement.getCursorPosition() - inputElement.inputPosition.x - 2;
+                var positionY = inputElement.getInputTextPosition().y - inputElement.getFontSize() * 0.05;
+                inputElement.context.fillText( "|", positionX, positionY  );
+            }
+
         },
 
         blink: function( inputElement ) {
-
-            if( this.isDirty ) {
-                this.drawCursor( inputElement );
-                this.isDirty = false;
-            }
 
             var lastBlinkGap = this.blinkingLastChange + this.blinkingFrequency;
 
             if( lastBlinkGap < this.blinkingClock.getElapsedTime() ) {
 
-                this.cursorSprite.visible = !this.cursorSprite.visible;
+                this.visible = !this.visible;
                 this.blinkingLastChange = this.blinkingClock.getElapsedTime();
 
-            }
+                inputElement.isDirty = false;
+                inputElement.makeTextSprite( null );
+                inputElement.isDirty = false;
 
+            }
         },
 
         moveCursor: function( inputElement ) {

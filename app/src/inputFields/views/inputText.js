@@ -391,6 +391,12 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         makeTextSprite: function( message ) {
 
+            if( null == message ) {
+
+                message = this.getInputValue();
+
+            }
+
             if( this.isDirty ) {
                 this.displaceInputValue();
                 this.setCursorTextPosition( this.getCursorTextPosition() );
@@ -467,7 +473,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         setInputTextValue: function( context, message ) {
             context.fillStyle = "rgba(" + this.fontColor.r + ", " + this.fontColor.g + ", " + this.fontColor.b + ", " + this.fontColor.a + ")";
             context.fillText( message, this.getInputTextPosition().x, this.getInputTextPosition().y );
-            this.drawCursor();
+            this.getInputManager().getInputCursor().drawCursor( this );
         },
 
         displaceInputValue: function() {
@@ -487,15 +493,15 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             }
 
-        },
-
-        drawCursor: function() {
-
-            var positionX = this.getCursorPosition() - this.inputPosition.x - 2;
-            var positionY = this.getInputTextPosition().y - this.getFontSize() * 0.05;
-            this.context.fillText( "|", positionX, positionY  );
-
         }
+
+//        drawCursor: function() {
+//
+//            var positionX = this.getCursorPosition() - this.inputPosition.x - 2;
+//            var positionY = this.getInputTextPosition().y - this.getFontSize() * 0.05;
+//            this.context.fillText( "|", positionX, positionY  );
+//
+//        }
 
     });
 

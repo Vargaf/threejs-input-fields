@@ -20,6 +20,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         useScreenCoordinates            :   false,
         canvasContainer                 :   '',
         inputPosition                   :   { x: 0, y: 0, z: 0 },
+        inputManager                    :   '',
 
         initialize: function() {
 
@@ -129,6 +130,19 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         getInputPosition: function() {
 
             return this.inputPosition;
+
+        },
+
+        setInputManager: function( inputManager ) {
+
+            this.inputManager = inputManager;
+            return this;
+
+        },
+
+        getInputManager: function() {
+
+            return this.inputManager;
 
         }
 

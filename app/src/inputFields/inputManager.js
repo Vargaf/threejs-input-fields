@@ -173,6 +173,13 @@ define(
 
             this.focusedElement = inputId;
 
+            if( inputFieldExists ) {
+
+                this.inputsLoaded[ inputId ].setInputManager( this );
+
+            }
+
+
             return inputFieldExists;
         },
 
@@ -228,15 +235,21 @@ define(
 
                 if( focusedInput.hasCursor() ) {
 
-                    if( this.cursorElement === false ) {
-                        this.cursorElement = new InputCursor();
-                    }
-
                     this.cursorElement.blink( focusedInput );
 
                 }
 
             }
+
+        },
+
+        getInputCursor: function() {
+
+            if( this.cursorElement === false ) {
+                this.cursorElement = new InputCursor();
+            }
+
+            return this.cursorElement;
 
         }
 
