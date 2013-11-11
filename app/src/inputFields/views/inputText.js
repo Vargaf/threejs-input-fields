@@ -380,6 +380,31 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         },
 
+        inputBackspace: function() {
+
+            var value = this.getInputValue();
+            var message = value.substring( 0, this.getCursorTextPosition() - 1 );
+            message += value.substring( this.getCursorTextPosition(), this.getCursorTextPosition().length );
+            this.value = message;
+            this.cursorTextPosition--;
+            this.isDirty = true;
+            this.makeTextSprite();
+            this.isDirty = false;
+
+        },
+
+        inputDel: function() {
+
+            var value = this.getInputValue();
+            var message = value.substring( 0, this.getCursorTextPosition() );
+            message += value.substring( this.getCursorTextPosition() + 1, this.getCursorTextPosition().length );
+            this.value = message;
+            this.isDirty = true;
+            this.makeTextSprite();
+            this.isDirty = false;
+
+        },
+
         /**
          *
          * Object methods
@@ -494,14 +519,6 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             }
 
         }
-
-//        drawCursor: function() {
-//
-//            var positionX = this.getCursorPosition() - this.inputPosition.x - 2;
-//            var positionY = this.getInputTextPosition().y - this.getFontSize() * 0.05;
-//            this.context.fillText( "|", positionX, positionY  );
-//
-//        }
 
     });
 

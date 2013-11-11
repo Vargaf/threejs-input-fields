@@ -58,6 +58,18 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        inputBackspace: function() {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'inputBackspace' function" );
+
+        },
+
+        inputDel: function() {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'inputDel' function" );
+
+        },
+
         /**
          *
          * Public methods

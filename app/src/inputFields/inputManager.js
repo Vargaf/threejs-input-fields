@@ -70,11 +70,13 @@ define(
                 }
             });
 
-            Mousetrap.bind( 'shift',      inputManagerClassTHIS.shiftPress, 'keypress' );
-            Mousetrap.bind( 'shift',      inputManagerClassTHIS.shiftRelease, 'keyup' );
+            Mousetrap.bind( 'shift',        inputManagerClassTHIS.shiftPress, 'keypress' );
+            Mousetrap.bind( 'shift',        inputManagerClassTHIS.shiftRelease, 'keyup' );
 
-            Mousetrap.bind( 'left',       inputManagerClassTHIS.cursorDisplace );
-            Mousetrap.bind( 'right',      inputManagerClassTHIS.cursorDisplace );
+            Mousetrap.bind( 'left',         inputManagerClassTHIS.cursorDisplace );
+            Mousetrap.bind( 'right',        inputManagerClassTHIS.cursorDisplace );
+            Mousetrap.bind( 'backspace',    inputManagerClassTHIS.inputBackspace );
+            Mousetrap.bind( 'del',          inputManagerClassTHIS.inputDel );
 
 
 
@@ -120,10 +122,9 @@ define(
         cursorDisplace: function( event ) {
 
             inputManagerClassTHIS.ignoreKey = true;
+            var focusedElement = inputManagerClassTHIS.getFocusedElement();
 
-            if( inputManagerClassTHIS.thereIsAFocusedElement() ) {
-
-                var focusedElement = inputManagerClassTHIS.inputsLoaded[ inputManagerClassTHIS.focusedElement ];
+            if( focusedElement ) {
 
                 if( event.keyCode == 39 ) {             // LEFT
                     focusedElement.setCursorTextPosition( focusedElement.getCursorTextPosition() + 1 );
@@ -134,6 +135,30 @@ define(
                 inputManagerClassTHIS.cursorElement.moveCursor( focusedElement );
 
             }
+        },
+
+        inputBackspace: function( event ) {
+
+            var focusedElement = inputManagerClassTHIS.getFocusedElement();
+
+            if( focusedElement ) {
+
+                focusedElement.inputBackspace();
+
+            }
+
+        },
+
+        inputDel: function( event ) {
+
+            var focusedElement = inputManagerClassTHIS.getFocusedElement();
+
+            if( focusedElement ) {
+
+                focusedElement.inputDel();
+
+            }
+
         },
 
         /**
@@ -250,6 +275,19 @@ define(
             }
 
             return this.cursorElement;
+
+        },
+
+        getFocusedElement: function() {
+            var focusedElement = false;
+
+            if( inputManagerClassTHIS.thereIsAFocusedElement() ) {
+                focusedElement = inputManagerClassTHIS.inputsLoaded[ inputManagerClassTHIS.focusedElement ];
+
+                focusedElement = typeof focusedElement == 'undefined' ? false : focusedElement
+            }
+
+            return focusedElement;
 
         }
 
