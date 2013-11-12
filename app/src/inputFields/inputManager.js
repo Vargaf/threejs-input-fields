@@ -77,6 +77,8 @@ define(
             Mousetrap.bind( 'right',        inputManagerClassTHIS.cursorDisplace );
             Mousetrap.bind( 'backspace',    inputManagerClassTHIS.inputBackspace );
             Mousetrap.bind( 'del',          inputManagerClassTHIS.inputDel );
+            Mousetrap.bind( 'end',          inputManagerClassTHIS.inputCursorEnd );
+            Mousetrap.bind( 'home',          inputManagerClassTHIS.inputCursorStart );
 
 
 
@@ -159,6 +161,28 @@ define(
 
             }
 
+        },
+
+        inputCursorEnd: function( event ) {
+
+            var focusedElement = inputManagerClassTHIS.getFocusedElement();
+
+            if( focusedElement ) {
+
+                focusedElement.inputCursorEnd();
+
+            }
+        },
+
+        inputCursorStart: function( event ) {
+
+            var focusedElement = inputManagerClassTHIS.getFocusedElement();
+
+            if( focusedElement ) {
+
+                focusedElement.inputCursorStart();
+
+            }
         },
 
         /**

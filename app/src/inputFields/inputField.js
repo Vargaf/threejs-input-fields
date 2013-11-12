@@ -70,6 +70,18 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        inputCursorStart: function() {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'inputCursorStart' function" );
+
+        },
+
+        inputCursorEnd: function() {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'inputCursorEnd' function" );
+
+        },
+
         /**
          *
          * Public methods

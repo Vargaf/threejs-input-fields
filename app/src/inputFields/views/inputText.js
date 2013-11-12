@@ -405,6 +405,24 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         },
 
+        inputCursorStart: function() {
+
+            this.cursorTextPosition = 0;
+            this.isDirty = true;
+            this.makeTextSprite();
+            this.isDirty = false;
+
+        },
+
+        inputCursorEnd: function() {
+
+            this.cursorTextPosition = this.getInputValue().length;
+            this.isDirty = true;
+            this.makeTextSprite();
+            this.isDirty = false;
+
+        },
+
         /**
          *
          * Object methods
