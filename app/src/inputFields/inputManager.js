@@ -165,6 +165,7 @@ define(
 
         inputCursorEnd: function( event ) {
 
+            inputManagerClassTHIS.ignoreKey = true;
             var focusedElement = inputManagerClassTHIS.getFocusedElement();
 
             if( focusedElement ) {
@@ -176,6 +177,7 @@ define(
 
         inputCursorStart: function( event ) {
 
+            inputManagerClassTHIS.ignoreKey = true;
             var focusedElement = inputManagerClassTHIS.getFocusedElement();
 
             if( focusedElement ) {
