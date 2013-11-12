@@ -39,13 +39,13 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         inputCanvasId                   :   '',
 
-        initialize: function() {
+        initialize: function( arguments ) {
 
             InputFieldClass.prototype.initialize.apply(this, arguments);
 
             this.inputType = 'text';
 
-            this.setCursorPosition( 0 );
+            this.getInputCursor().setCursorPosition( 0 );
 
             var canvas = document.createElement('canvas');
             canvas.width = this.getInputFieldSize();
@@ -176,89 +176,16 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
         },
 
-        setCursorPosition: function( position ) {
+        setCursorPosition: function( cursorPosition ) {
 
-            if( position > this.getInputPosition().x + this.getInputFieldSize() - this.getBorderSize() * 3 ) {
-
-                position = this.getInputPosition().x + this.getInputFieldSize() - this.getBorderSize() * 3;
-
-            } else if( position < this.getInputPosition().x + this.getBorderSize() * 2 ) {
-
-                position = this.getInputPosition().x + this.getBorderSize() * 2;
-
-            }
-
-            this.cursorPosition = position;
-
+            this.cursorPosition = cursorPosition;
             return this;
 
         },
 
-        getCursorPosition: function() {
+        setCursorTextPosition: function( cursorTextPosition ) {
 
-            return this.cursorPosition;
-
-        },
-
-        /**
-         * Set the cursor position on the correct x-coordinate
-         *
-         * @param position
-         * @returns {inputTextClass}
-         */
-        setCursorTextPosition: function( position ) {
-
-            if( position < 0 ) {
-                position = 0;
-            } else if( position > this.getInputValue().length ) {
-                position = this.getInputValue().length;
-            }
-
-            this.cursorTextPosition = position;
-
-            var needsToBeCleaned = !this.isDirty;
-
-            var xCoordinatePosition = this.getInputCursorPositionXCoordinate( position, this.getInputValue() );
-            var max = this.getInputPosition().x + this.getInputFieldSize() - this.getBorderSize() * 3;
-            var min = this.getInputPosition().x + this.getBorderSize() * 2;
-
-            if( xCoordinatePosition >= max ) {
-
-                // Displace the text to show the next two or one characters
-                if( ( position + 2 ) <= this.getInputValue().length ) {
-                    this.cursorTextPosition += 2;
-                } else if( ( position + 1 ) <= this.getInputValue().length ) {
-                    this.cursorTextPosition += 1;
-                }
-
-                this.displaceInputValue();
-
-                xCoordinatePosition = this.getInputCursorPositionXCoordinate( position, this.getInputValue() );
-
-            } else if( xCoordinatePosition <= min ) {
-
-                // Displace the text to show the preview two or one characters
-                if( ( position - 2 ) >= 0 ) {
-                    this.cursorTextPosition -= 2;
-                } else if( ( position - 1 ) >= 0 ) {
-                    this.cursorTextPosition -= 1;
-                }
-
-                this.displaceInputValue();
-
-                xCoordinatePosition = this.getInputCursorPositionXCoordinate( position, this.getInputValue() );
-            }
-
-            // Since we may have displaced the cursor to show more characters is convenient to save the real cursor position again
-            this.cursorTextPosition = position;
-            this.cursorPosition = xCoordinatePosition;
-
-            if( needsToBeCleaned ) {
-                this.isDirty = true;
-                this.makeTextSprite( this.getInputValue() );
-                this.isDirty = false;
-            }
-
+            this.cursorTextPosition = cursorTextPosition;
             return this;
 
         },
@@ -275,6 +202,12 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         getCursorTextPosition: function() {
 
             return this.cursorTextPosition;
+
+        },
+
+        getCursorPosition: function() {
+
+            return this.cursorPosition;
 
         },
 
@@ -328,6 +261,12 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             this.cursorTextPosition = value.length;
 
             return this;
+        },
+
+        getInputCursor: function() {
+
+            return this.getInputManager().getInputCursor();
+
         },
 
         /**
@@ -428,8 +367,30 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
          * Object methods
          *
          */
-        incCursorTextPosition: function() {
-            this.cursorTextPosition++;
+        incCursorTextPosition: function( incVal ) {
+
+            if( typeof incVal === 'undefined') {
+
+                this.cursorTextPosition++;
+
+            } else {
+
+                this.cursorPosition += incVal;
+
+            }
+        },
+
+        decCursorTextPosition: function( decVal ) {
+
+            if( typeof decVal === 'undefined') {
+
+                this.cursorTextPosition--;
+
+            } else {
+
+                this.cursorPosition -= decVal;
+
+            }
         },
 
         makeTextSprite: function( message ) {
@@ -442,7 +403,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             if( this.isDirty ) {
                 this.displaceInputValue();
-                this.setCursorTextPosition( this.getCursorTextPosition() );
+                this.getInputCursor().setCursorTextPosition( this.getCursorTextPosition() );
             }
 
             var borderThickness = this.getBorderSize();
@@ -516,7 +477,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         setInputTextValue: function( context, message ) {
             context.fillStyle = "rgba(" + this.fontColor.r + ", " + this.fontColor.g + ", " + this.fontColor.b + ", " + this.fontColor.a + ")";
             context.fillText( message, this.getInputTextPosition().x, this.getInputTextPosition().y );
-            this.getInputManager().getInputCursor().drawCursor( this );
+            this.getInputCursor().drawCursor( this );
         },
 
         displaceInputValue: function() {

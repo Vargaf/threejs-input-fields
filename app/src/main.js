@@ -59,15 +59,30 @@ require(
         mainCanvas.add( exampleObjects.getObjects() );
 
         var inputManager = new InputManagerClass();
-        inputManager.create( 'text', 'first-text', mainCanvas );
 
-        var firstTextInput = inputManager.getInput( 'first-text')
+        var firstTextInput = inputManager
+            .create( 'text', 'first-text', mainCanvas )
             .setValue( 'Hola mundo' )
             .setUseScreenCoordinates( true )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 10, 10, 0 );
         mainCanvas.add( firstTextInput.getElement() );
+
+        var secondTextInput = inputManager
+            .create( 'text', 'second-text', mainCanvas )
+            .setUseScreenCoordinates( true )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputPosition( 220, 10, 0 );
+        mainCanvas.add( secondTextInput.getElement() );
+
+        var thirdTextInput = inputManager
+            .create( 'text', 'third-text', mainCanvas )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputPosition( 100, 120, 0 );
+        mainCanvas.add( thirdTextInput.getElement() );
 
         animationController.add( mainCanvas );
         animationController.add( inputManager );

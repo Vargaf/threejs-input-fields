@@ -24,7 +24,8 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         initialize: function() {
 
-            this.canvasContainer = this.options.canvas;
+            this.setCanvasContainer( this.options.canvas );
+            this.setInputManager( this.options.inputManager );
 
         },
 
@@ -157,9 +158,30 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        setCanvasContainer: function( canvas ) {
+
+            if( typeof canvas === 'undefined' ) {
+                console.log( 'The canvas is needed' );
+            } else {
+                this.canvasContainer = canvas;
+            }
+
+            return this;
+        },
+
+        getCanvasContainer: function() {
+
+            return this.canvasContainer;
+
+        },
+
         setInputManager: function( inputManager ) {
 
-            this.inputManager = inputManager;
+            if( typeof inputManager === 'undefined' ) {
+                console.error( 'The inputManager is needed' );
+            } else {
+                this.inputManager = inputManager;
+            }
             return this;
 
         },
@@ -167,6 +189,19 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         getInputManager: function() {
 
             return this.inputManager;
+
+        },
+
+        getIsDirty: function() {
+
+            return this.isDirty;
+
+        },
+
+        setIsDirty: function( isDirty ) {
+
+            this.isDirty = isDirty;
+            return this;
 
         }
 

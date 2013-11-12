@@ -22,6 +22,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         positionX                   :   0,
         positionY                   :   0,
         visible                     :   false,
+        inputManager                :   false,
 
         initialize: function() {
 
@@ -29,29 +30,14 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
-        drawCursor: function( inputElement ) {
+        setInputManager: function( inputManager ) {
 
-//            var canvas = document.createElement('canvas');
-//            canvas.width = inputElement.getInputFieldSize();
-//            canvas.height = inputElement.getInputFieldSize();
-//
-//            var context = canvas.getContext('2d');
-//            context.font = inputElement.getFontSize() + 'px ' + inputElement.getFontFamily();
-//            context.textBaseline = "top";
-//
-//            context.fillStyle = "rgba(" + inputElement.getFontColor().r + ", " + inputElement.getFontColor().g + ", " + inputElement.getFontColor().b + ", " + inputElement.getFontColor().a + ")";
-//            context.fillText( "|", 0, 0  );
-//
-//            var texture = new THREE.Texture(canvas)
-//            texture.needsUpdate = true;
-//
-//            var spriteMaterial = new THREE.SpriteMaterial(
-//                { map: texture, transparent: true, useScreenCoordinates: true, alignment: inputElement.getSpriteAlignment() } );
-//            this.cursorSprite = new THREE.Sprite( spriteMaterial );
-//            this.cursorSprite.scale.set( inputElement.getInputFieldSize(), inputElement.getInputFieldSize(), 0 );
-//
-//            this.moveCursor( inputElement );
-//            inputElement.canvasContainer.add( this.cursorSprite );
+            this.inputManager = inputManager;
+            return this;
+
+        },
+
+        drawCursor: function( inputElement ) {
 
             if( this.visible ) {
                 var positionX = inputElement.getCursorPosition() - inputElement.inputPosition.x - 2;
@@ -77,19 +63,112 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             }
         },
 
-        moveCursor: function( inputElement ) {
-
-//            this.getCursorPosition( inputElement );
-//            this.cursorSprite.position.set( this.positionX, this.positionY, 1000 );
-
-        },
-
         getCursorPosition: function( inputElement ) {
 
             this.positionX = inputElement.getCursorPosition() - 2;
             this.positionY = inputElement.getInputTextPosition().y + inputElement.getInputPosition().y - inputElement.getFontSize() * 0.05;
 
-        }
+        },
+
+        getInputManager: function() {
+
+            if( this.inputManager === false ) {
+                console.error( 'The input manager has not been set correctly into inputCursor object' );
+            } else {
+                return this.inputManager;
+            }
+
+        },
+
+        setCursorPosition: function( position ) {
+
+            var inputField = this.getInputManager().getFocusedElement();
+
+            if( typeof inputField !== 'undefined' && inputField !== false ) {
+
+                if( position > inputField.getInputPosition().x + inputField.getInputFieldSize() - inputField.getBorderSize() * 3 ) {
+
+                    position = inputField.getInputPosition().x + inputField.getInputFieldSize() - inputField.getBorderSize() * 3;
+
+                } else if( position < inputField.getInputPosition().x + inputField.getBorderSize() * 2 ) {
+
+                    position = inputField.getInputPosition().x + inputField.getBorderSize() * 2;
+
+                }
+
+                inputField.setCursorPosition( position );
+
+            }
+
+            return this;
+
+        },
+
+        /**
+         * Set the cursor position on the correct x-coordinate
+         *
+         * @param position
+         * @returns {inputTextClass}
+         */
+        setCursorTextPosition: function( position ) {
+
+            var inputField = this.getInputManager().getFocusedElement();
+
+            if( typeof inputField !== 'undefined' && inputField !== false ) {
+                if( position < 0 ) {
+                    position = 0;
+                } else if( position > inputField.getInputValue().length ) {
+                    position = inputField.getInputValue().length;
+                }
+
+                inputField.setCursorTextPosition( position );
+
+                var needsToBeCleaned = !inputField.isDirty;
+
+                var xCoordinatePosition = inputField.getInputCursorPositionXCoordinate( position, inputField.getInputValue() );
+                var max = inputField.getInputPosition().x + inputField.getInputFieldSize() - inputField.getBorderSize() * 3;
+                var min = inputField.getInputPosition().x + inputField.getBorderSize() * 2;
+
+                if( xCoordinatePosition >= max ) {
+
+                    // Displace the text to show the next two or one characters
+                    if( ( position + 2 ) <= inputField.getInputValue().length ) {
+                        inputField.incCursorTextPosition( 2 );
+                    } else if( ( position + 1 ) <= inputField.getInputValue().length ) {
+                        inputField.incCursorTextPosition();
+                    }
+
+                    inputField.displaceInputValue();
+
+                    xCoordinatePosition = inputField.getInputCursorPositionXCoordinate( position, inputField.getInputValue() );
+
+                } else if( xCoordinatePosition <= min ) {
+
+                    // Displace the text to show the preview two or one characters
+                    if( ( position - 2 ) >= 0 ) {
+                        inputField.decCursorTextPosition( 2 );
+                    } else if( ( position - 1 ) >= 0 ) {
+                        inputField.decCursorTextPosition();
+                    }
+
+                    inputField.displaceInputValue();
+
+                    xCoordinatePosition = inputField.getInputCursorPositionXCoordinate( position, inputField.getInputValue() );
+                }
+
+                // Since we may have displaced the cursor to show more characters is convenient to save the real cursor position again
+                inputField.setCursorTextPosition( position );
+                inputField.setCursorPosition( xCoordinatePosition );
+
+                if( needsToBeCleaned ) {
+                    inputField.setIsDirty( true );
+                    inputField.makeTextSprite( inputField.getInputValue() );
+                    inputField.setIsDirty( false );
+                }
+            }
+
+            return this;
+        },
 
     });
 

@@ -128,14 +128,13 @@ define(
 
             if( focusedElement ) {
 
+                var inputCursor = inputManagerClassTHIS.getInputCursor();
+
                 if( event.keyCode == 39 ) {             // LEFT
-                    focusedElement.setCursorTextPosition( focusedElement.getCursorTextPosition() + 1 );
+                    inputCursor.setCursorTextPosition( focusedElement.getCursorTextPosition() + 1 );
                 } else if( event.keyCode == 37 ) {      // RIGHT
-                    focusedElement.setCursorTextPosition( focusedElement.getCursorTextPosition() - 1 );
+                    inputCursor.setCursorTextPosition( focusedElement.getCursorTextPosition() - 1 );
                 }
-
-                inputManagerClassTHIS.cursorElement.moveCursor( focusedElement );
-
             }
         },
 
@@ -214,7 +213,7 @@ define(
             {
                 case this.inputTypesEnabled.text :
 
-                    this.inputsLoaded[ inputId ] = new InputText( { id: inputId, canvas: canvasContainer } );
+                    this.inputsLoaded[ inputId ] = new InputText( { id: inputId, canvas: canvasContainer, inputManager: this } );
                     break;
 
                 default:
@@ -231,7 +230,7 @@ define(
             }
 
 
-            return inputFieldExists;
+            return this.inputsLoaded[ inputId ];
         },
 
         getInput: function( inputId ) {
@@ -275,7 +274,7 @@ define(
 
                 if( focusedInput.hasCursor() ) {
 
-                    this.cursorElement.moveCursor( focusedInput );
+
 
                 }
             }
@@ -298,6 +297,7 @@ define(
 
             if( this.cursorElement === false ) {
                 this.cursorElement = new InputCursor();
+                this.cursorElement.setInputManager( this );
             }
 
             return this.cursorElement;
