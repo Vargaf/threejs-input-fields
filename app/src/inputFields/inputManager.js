@@ -315,6 +315,24 @@ define(
 
             return focusedElement;
 
+        },
+
+        getInside3DEnviromentInputs: function() {
+
+            var inputs = [];
+            var inputLoaded = '';
+
+            for( index in this.inputsLoaded ) {
+
+                inputLoaded = this.inputsLoaded[ index ];
+                if( inputLoaded.getUseScreenCoordinates() == true ) {
+                    inputs.push( inputLoaded );
+                }
+
+            }
+
+            return inputs;
+
         }
 
     });

@@ -18,7 +18,9 @@ require.config({
         "threejs"               : "../vendors/threejs/build/three",
         "detector"              : "../vendors/threejs/examples/js/Detector",
         "orbitControls"         : "../vendors/threejs/examples/js/controls/OrbitControls",
-        "mousetrap"             : "../vendors/mousetrap/mousetrap.min"
+        "mousetrap"             : "../vendors/mousetrap/mousetrap.min",
+
+        "raycaster"            : "../vendors/RayCaster/raycaster"
     },
 
     // Sets the configuration for your third party scripts that are not AMD compatible
@@ -42,14 +44,16 @@ require(
         'views/exampleObjects',
         'modules/animationController',
         'inputFields/inputManager',
-        'jquery'
+        'jquery',
+        'raycaster'
     ],
     function(
         CanvasElementClass,
         ExampleObjectsClass,
         AnimationControllerClass,
         InputManagerClass,
-        $ )
+        $,
+        RayCaster )
     {
         var animationController = new AnimationControllerClass();
 
@@ -84,8 +88,11 @@ require(
             .setInputPosition( 100, 120, 0 );
         mainCanvas.add( thirdTextInput.getElement() );
 
+        var raycaster = new RayCaster( { camera: mainCanvas.getCamera(), inputManager: inputManager } );
+
         animationController.add( mainCanvas );
         animationController.add( inputManager );
+        animationController.add( raycaster );
 
         animationController.animate();
 });

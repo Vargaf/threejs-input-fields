@@ -168,7 +168,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             }
 
             return this;
-        },
+        }
 
     });
 

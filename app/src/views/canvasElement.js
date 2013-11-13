@@ -116,6 +116,10 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
             this.renderCanvas();
             this.update();
+        },
+
+        getCamera: function() {
+            return this.camera;
         }
 
 
