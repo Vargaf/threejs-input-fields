@@ -203,6 +203,19 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             this.isDirty = isDirty;
             return this;
 
+        },
+
+        setSpriteInputFieldElement: function( spriteInputFieldElement ) {
+
+            this.spriteInputFieldElement = spriteInputFieldElement;
+            return this;
+
+        },
+
+        getSpriteInputFieldElement: function() {
+
+            return this.spriteInputFieldElement;
+
         }
 
     });

@@ -21,6 +21,7 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
             this.scene = new THREE.Scene();
             this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 20000 );
+            this.camera.name = 'camera';
 
             this.camera.position.set( 0, 150, 400 );
             this.camera.lookAt( this.scene.position );
@@ -46,6 +47,7 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
             }
 
             var light = new THREE.AmbientLight( 0x404040 ); // soft white light
+            light.name = "light";
             this.scene.add( light );
 
             this.renderer.setSize( window.innerWidth, window.innerHeight );

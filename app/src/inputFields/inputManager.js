@@ -325,8 +325,8 @@ define(
             for( index in this.inputsLoaded ) {
 
                 inputLoaded = this.inputsLoaded[ index ];
-                if( inputLoaded.getUseScreenCoordinates() == true ) {
-                    inputs.push( inputLoaded );
+                if( inputLoaded.getUseScreenCoordinates() == false ) {
+                    inputs.push( inputLoaded.getSpriteInputFieldElement() );
                 }
 
             }

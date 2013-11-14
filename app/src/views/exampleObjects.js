@@ -31,6 +31,7 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             floor.position.y = -0.5;
             floor.rotation.x = Math.PI / 2;
             floor.name = "Checkerboard Floor";
+            floor.id = "CheckerboardFloor";
             group.add(floor);
 
             // SKYBOX/FOG
@@ -45,6 +46,7 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
             cube.position.set(0,50,0);
             cube.name = "Cube";
+            cube.id = "Cube";
             group.add(cube);
 
             return group;

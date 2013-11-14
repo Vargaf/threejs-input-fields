@@ -57,7 +57,7 @@ require(
     {
         var animationController = new AnimationControllerClass();
 
-        var mainCanvas = new CanvasElementClass( { el: $( "body" ) } );
+        mainCanvas = new CanvasElementClass( { el: $( "body" ) } );
 
         var exampleObjects = new ExampleObjectsClass();
         mainCanvas.add( exampleObjects.getObjects() );

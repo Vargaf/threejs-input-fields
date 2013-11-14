@@ -421,18 +421,49 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             if( this.inputCanvasId === '' ) {
 
-                var spriteMaterial = new THREE.SpriteMaterial(
-                    { map: texture, transparent: true, useScreenCoordinates: this.getUseScreenCoordinates(), alignment: this.getSpriteAlignment() } );
+                if( this.getUseScreenCoordinates() ) {
 
-                sprite = new THREE.Sprite( spriteMaterial );
+                    var spriteMaterial = new THREE.SpriteMaterial(
+                        { map: texture, transparent: true, useScreenCoordinates: this.getUseScreenCoordinates(), alignment: this.getSpriteAlignment() } );
 
-                this.inputCanvasId = 'inputText-' + ( Math.round( Math.random() * 100000000 ) );
-                sprite.name = this.inputCanvasId;
-                sprite.scale.set( this.getInputFieldSize(), this.getInputFieldSize(), 0 );
+                    sprite = new THREE.Sprite( spriteMaterial );
+
+                    this.inputCanvasId = 'inputText-' + ( Math.round( Math.random() * 100000000 ) );
+                    sprite.name = this.inputCanvasId;
+                    sprite.scale.set( this.getInputFieldSize(), this.getInputFieldSize(), 0 );
+
+                } else {
+
+                    var inputMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
+                    var inputGeometry = new THREE.PlaneGeometry( this.getInputFieldSize(), this.getInputFieldSize() );
+                    var input = new THREE.Mesh( inputGeometry, inputMaterial );
+                    input.id = 'inputText-' + ( Math.round( Math.random() * 100000000 ) );
+                    input.name = input.id;
+                    //floor.position.y = -0.5;
+                    //floor.rotation.x = Math.PI / 2;
+                    sprite = input;
+
+                }
+
+
+
+
+
+
 
             } else {
 
-                this.spriteInputFieldElement.material.map = texture;
+                if( this.getUseScreenCoordinates() ) {
+
+                    this.spriteInputFieldElement.material.map = texture;
+
+                } else {
+
+                    var inputMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
+
+                    this.spriteInputFieldElement.material = inputMaterial;
+
+                }
 
             }
 

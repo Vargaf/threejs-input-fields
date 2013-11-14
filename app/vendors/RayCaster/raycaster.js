@@ -13,36 +13,38 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         mouseY                  :   '',
         isDirty                 :   false,
         projector               :   '',
+        raycaster               :   '',
 
 
         initialize: function() {
 
             raycasterClassTHIS = this;
 
-            this.setCanvasContainer( this.attributes.canvas );
+            this.setCamera( this.attributes.camera );
             this.setInputManager( this.attributes.inputManager );
 
             // initialize object to perform world/screen calculations
             this.projector = new THREE.Projector();
+            this.raycaster = new THREE.Raycaster();
 
             document.addEventListener( 'mousemove', raycasterClassTHIS.onDocumentMouseMove, false );
 
         },
 
-        setCanvasContainer: function( canvas ) {
+        setCamera: function( camera ) {
 
-            if( typeof canvas === 'undefined' ) {
-                console.log( 'The canvas is needed' );
+            if( typeof camera === 'undefined' ) {
+                console.log( 'The camera is needed' );
             } else {
-                this.canvasContainer = canvas;
+                this.camera = camera;
             }
 
             return this;
         },
 
-        getCanvasContainer: function() {
+        getCamera: function() {
 
-            return this.canvasContainer;
+            return this.camera;
 
         },
 
@@ -75,18 +77,24 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
             raycasterClassTHIS.isDirty = true;
 
+
+
         },
 
         requestAnimationFrame: function() {
 
             if( this.isDirty ) {
 
+
+
                 var vector = new THREE.Vector3( this.mouseX, this.mouseY, 1 );
                 this.projector.unprojectVector( vector, this.camera );
-                var ray = new THREE.Raycaster( this.camera.position, vector.sub( this.camera.position ).normalize() );
 
                 var inside3DEnviromentInputs = this.getInputManager().getInside3DEnviromentInputs();
-                var intersects = ray.intersectObjects( scene.children );
+
+                this.raycaster.set( this.camera.position, vector.sub( this.camera.position ).normalize() );
+
+                var intersects = this.raycaster.intersectObjects( inside3DEnviromentInputs );
 
                 // INTERSECTED = the object in the scene currently closest to the camera
                 //		and intersected by the Ray projected from the mouse position
@@ -96,7 +104,6 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                 {
                     console.log( 'Intersection' );
                 }
-
 
                 this.isDirty = false;
             }
