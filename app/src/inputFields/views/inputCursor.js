@@ -41,7 +41,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
             if( this.visible ) {
                 var positionX = inputElement.getCursorPosition() - inputElement.inputPosition.x - 2;
-                var positionY = inputElement.getInputTextPosition().y - inputElement.getFontSize() * 0.05;
+                var positionY = inputElement.getInputTextPosition().y;// - inputElement.getFontSize() * 0.05;
                 inputElement.context.fillText( "|", positionX, positionY  );
             }
 
@@ -121,22 +121,43 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                     position = inputField.getInputValue().length;
                 }
 
-                inputField.setCursorTextPosition( position );
+                var oldPosition = inputField.getCursorTextPosition();
+                var offsetedPosition = position;
+
+
+                // Displace the position to assure at least one character of visibility
+                if( oldPosition < position ) {
+                    if( ( position + 2 ) <= inputField.getInputValue().length ) {
+                        inputField.incCursorTextPosition( 3 );
+                        offsetedPosition += 2;
+                    } else if( ( position + 1 ) <= inputField.getInputValue().length ) {
+                        inputField.incCursorTextPosition( 2 );
+                        offsetedPosition++;
+                    }
+                } else if( oldPosition > position ){
+                    if( ( position - 2 ) >= 0 ) {
+                        inputField.decCursorTextPosition( 3 );
+                        offsetedPosition -= 2;
+                    } else if( ( position - 1 ) >= 0 ) {
+                        inputField.decCursorTextPosition( 2 );
+                        offsetedPosition--;
+                    }
+                }
 
                 var needsToBeCleaned = !inputField.isDirty;
 
-                var xCoordinatePosition = inputField.getInputCursorPositionXCoordinate( position, inputField.getInputValue() );
+                var xCoordinatePosition = inputField.getInputCursorPositionXCoordinate( offsetedPosition, inputField.getInputValue() );
                 var max = inputField.getInputPosition().x + inputField.getInputFieldSize() - inputField.getBorderSize() * 3;
                 var min = inputField.getInputPosition().x + inputField.getBorderSize() * 2;
 
                 if( xCoordinatePosition >= max ) {
 
                     // Displace the text to show the next two or one characters
-                    if( ( position + 2 ) <= inputField.getInputValue().length ) {
-                        inputField.incCursorTextPosition( 2 );
-                    } else if( ( position + 1 ) <= inputField.getInputValue().length ) {
-                        inputField.incCursorTextPosition();
-                    }
+//                    if( ( position + 2 ) <= inputField.getInputValue().length ) {
+//                        inputField.incCursorTextPosition( 2 );
+//                    } else if( ( position + 1 ) <= inputField.getInputValue().length ) {
+//                        inputField.incCursorTextPosition();
+//                    }
 
                     inputField.displaceInputValue();
 
@@ -145,11 +166,11 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                 } else if( xCoordinatePosition <= min ) {
 
                     // Displace the text to show the preview two or one characters
-                    if( ( position - 2 ) >= 0 ) {
-                        inputField.decCursorTextPosition( 2 );
-                    } else if( ( position - 1 ) >= 0 ) {
-                        inputField.decCursorTextPosition();
-                    }
+//                    if( ( position - 2 ) >= 0 ) {
+//                        inputField.decCursorTextPosition( 2 );
+//                    } else if( ( position - 1 ) >= 0 ) {
+//                        inputField.decCursorTextPosition();
+//                    }
 
                     inputField.displaceInputValue();
 

@@ -37,8 +37,12 @@ define(
         isCapsLocked                :   false,
         ignoreKey                   :   false,
         cursorElement               :   false,
+        lastCameraPosition          :   { x: 0, y: 0, z: 0 },
+        camera                      :   '',
 
         initialize: function() {
+
+            this.setCamera( this.attributes.camera );
 
             inputManagerClassTHIS = this;
 
@@ -270,7 +274,7 @@ define(
             if( focusedInput.isDirty ) {
 
                 //focusedInput.canvasContainer.refreshElement( focusedInput.getElement(), focusedInput.id );
-                focusedInput.drawSpriteInputFieldElement();
+                focusedInput.drawInputElement();
 
                 if( focusedInput.hasCursor() ) {
 
@@ -326,12 +330,29 @@ define(
 
                 inputLoaded = this.inputsLoaded[ index ];
                 if( inputLoaded.getUseScreenCoordinates() == false ) {
-                    inputs.push( inputLoaded.getSpriteInputFieldElement() );
+                    inputs.push( inputLoaded.getInputElement() );
                 }
 
             }
 
             return inputs;
+
+        },
+
+        setCamera: function( camera ) {
+
+            if( typeof camera === 'undefined' ) {
+                console.log( 'The camera is needed' );
+            } else {
+                this.camera = camera;
+            }
+
+            return this;
+        },
+
+        getCamera: function() {
+
+            return this.camera;
 
         }
 

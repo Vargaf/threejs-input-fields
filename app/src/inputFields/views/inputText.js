@@ -38,6 +38,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         canvas                          :   '',
 
         inputCanvasId                   :   '',
+        inside3DSpaceCollisionDetector  :   '',
 
         initialize: function( arguments ) {
 
@@ -48,13 +49,8 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             this.getInputCursor().setCursorPosition( 0 );
 
             var canvas = document.createElement('canvas');
-            canvas.width = this.getInputFieldSize();
-            canvas.height = this.getInputFieldSize();
 
             var context = canvas.getContext('2d');
-            context.font = this.getFontSize() + 'px ' + this.getFontFamily();
-            context.textBaseline = "top";
-
             this.context = context;
             this.canvas = canvas;
         },
@@ -243,8 +239,8 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             var inputTextPosition = { x: 0, y: 0, z: 0 };
 
-            inputTextPosition.x = this.inputTextPosition.x + this.getBorderSize() * 2;
-            inputTextPosition.y = this.inputTextPosition.y + this.getBorderSize() * 2;
+            inputTextPosition.x = this.inputTextPosition.x + this.getBorderOffset();
+            inputTextPosition.y = this.inputTextPosition.y + this.getBorderOffset();
             inputTextPosition.z = this.inputTextPosition.z;
 
             return inputTextPosition;
@@ -275,15 +271,15 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
          *
          */
 
-        drawSpriteInputFieldElement: function() {
+        drawInputElement: function() {
 
-            var sprite = this.makeTextSprite( this.value );
+            var inputElement = this.makeTextSprite( this.value );
 
-            if( sprite !== false ) {
-                sprite.position.set( this.getInputPosition().x, this.getInputPosition().y, this.getInputPosition().z );
-                sprite.id = this.id;
+            if( inputElement !== false ) {
+                inputElement.id = this.id;
 
-                this.spriteInputFieldElement = sprite;
+                this.inputElement = inputElement;
+
             }
 
             this.isDirty = false;
@@ -375,7 +371,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             } else {
 
-                this.cursorPosition += incVal;
+                this.cursorTextPosition += incVal;
 
             }
         },
@@ -388,7 +384,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             } else {
 
-                this.cursorPosition -= decVal;
+                this.cursorTextPosition -= decVal;
 
             }
         },
@@ -401,73 +397,74 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             }
 
-            if( this.isDirty ) {
-                this.displaceInputValue();
-                this.getInputCursor().setCursorTextPosition( this.getCursorTextPosition() );
-            }
-
+            this.resetBorderOffset();
             var borderThickness = this.getBorderSize();
 
             var context = this.context;
             var canvas = this.canvas;
 
-            this.roundRect( context, borderThickness / 2, borderThickness, this.getInputFieldSize() - borderThickness / 2 - 1, this.getFontSize() + borderThickness * 2, this.getBorderRadius() );
+            var realInputHeight = this.getFontSize() + this.getBorderOffset() * 2 + borderThickness;
+
+            canvas.width = this.getInputFieldSize();
+            canvas.height = realInputHeight;
+
+            context.font = this.getFontSize() + 'px ' + this.getFontFamily();
+            context.textBaseline = "top";
+
+            if( this.isDirty ) {
+                this.displaceInputValue();
+                this.getInputCursor().setCursorTextPosition( this.getCursorTextPosition() );
+            }
+
+            this.roundRect( context, borderThickness / 2, borderThickness / 2, this.getInputFieldSize() - borderThickness, realInputHeight - borderThickness, this.getBorderRadius() );
             this.setInputTextValue( context, message );
 
             var texture = new THREE.Texture(canvas)
             texture.needsUpdate = true;
 
-            var sprite = false;
+            var inputElement = false;
 
             if( this.inputCanvasId === '' ) {
 
                 if( this.getUseScreenCoordinates() ) {
 
-                    var spriteMaterial = new THREE.SpriteMaterial(
+                    var inputElementMaterial = new THREE.SpriteMaterial(
                         { map: texture, transparent: true, useScreenCoordinates: this.getUseScreenCoordinates(), alignment: this.getSpriteAlignment() } );
 
-                    sprite = new THREE.Sprite( spriteMaterial );
+                    inputElement = new THREE.Sprite( inputElementMaterial );
 
-                    this.inputCanvasId = 'inputText-' + ( Math.round( Math.random() * 100000000 ) );
-                    sprite.name = this.inputCanvasId;
-                    sprite.scale.set( this.getInputFieldSize(), this.getInputFieldSize(), 0 );
+                    var random = Math.round( Math.random() * 100000000 );
+                    this.inputCanvasId = 'inputText-' + ( random );
+                    inputElement.name = this.inputCanvasId;
+                    inputElement.scale.set( this.getInputFieldSize(), realInputHeight, 0 );
+                    inputElement.position.set( this.getInputPosition().x, this.getInputPosition().y, this.getInputPosition().z );
 
                 } else {
 
-                    var inputMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
-                    var inputGeometry = new THREE.PlaneGeometry( this.getInputFieldSize(), this.getInputFieldSize() );
-                    var input = new THREE.Mesh( inputGeometry, inputMaterial );
-                    input.id = 'inputText-' + ( Math.round( Math.random() * 100000000 ) );
-                    input.name = input.id;
-                    //floor.position.y = -0.5;
-                    //floor.rotation.x = Math.PI / 2;
-                    sprite = input;
+                    var random = Math.round( Math.random() * 100000000 );
+                    this.inputCanvasId = 'inputText-' + ( random );
+                    inputElement = new THREE.Mesh(
+
+                        new THREE.PlaneGeometry( this.getInputFieldSize(), realInputHeight ),
+                        new THREE.MeshBasicMaterial({
+                            map: texture,
+                            side: THREE.DoubleSide,
+                            transparent: true
+                        }));
+
+                    inputElement.position.set( this.getInputPosition().x + this.getInputFieldSize() / 2, this.getInputPosition().y - realInputHeight / 2, this.getInputPosition().z );
+                    this.inputElement = inputElement;
 
                 }
-
-
-
-
-
 
 
             } else {
 
-                if( this.getUseScreenCoordinates() ) {
-
-                    this.spriteInputFieldElement.material.map = texture;
-
-                } else {
-
-                    var inputMaterial = new THREE.MeshBasicMaterial( { map: texture, transparent: true } );
-
-                    this.spriteInputFieldElement.material = inputMaterial;
-
-                }
+                    this.inputElement.material.map = texture;
 
             }
 
-            return sprite;
+            return inputElement;
         },
 
         /**
@@ -515,16 +512,16 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             var message = this.getInputValue();
             var tmpMessage = message.substring( 0, this.getCursorTextPosition() );
-            var textWidth = this.context.measureText( tmpMessage ).width + this.getBorderOffset() * 2;
+            var textWidth = this.context.measureText( tmpMessage ).width + this.getBorderOffset() * 3;
             var textMovedWith = textWidth + this.inputTextPosition.x;
 
-            if( textMovedWith > this.getInputFieldSize() ) {
+            if( textMovedWith >= this.getInputFieldSize() ) {
 
                 this.setInputTextPositionX( this.getInputFieldSize() - textWidth );
 
-            } else if(textMovedWith < ( this.getBorderOffset() * 2 ) ) {
+            } else if(textMovedWith < ( this.getBorderOffset() ) ) {
 
-                this.setInputTextPositionX( this.inputTextPosition.x + Math.abs( textMovedWith ) + this.getBorderOffset() * 2);
+                this.setInputTextPositionX( this.inputTextPosition.x + Math.abs( textMovedWith ) + this.getBorderOffset() * 3 );
 
             }
 

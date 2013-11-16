@@ -62,13 +62,13 @@ require(
         var exampleObjects = new ExampleObjectsClass();
         mainCanvas.add( exampleObjects.getObjects() );
 
-        var inputManager = new InputManagerClass();
+        var inputManager = new InputManagerClass( { camera: mainCanvas.getCamera() } );
 
         var firstTextInput = inputManager
             .create( 'text', 'first-text', mainCanvas )
             .setValue( 'Hola mundo' )
             .setUseScreenCoordinates( true )
-            .setFontSize( 20 )
+            .setFontSize( 40 )
             .setBorderSize( 2 )
             .setInputPosition( 10, 10, 0 );
         mainCanvas.add( firstTextInput.getElement() );
@@ -76,6 +76,7 @@ require(
         var secondTextInput = inputManager
             .create( 'text', 'second-text', mainCanvas )
             .setUseScreenCoordinates( true )
+            .setValue( 'Hola mundo' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 220, 10, 0 );
@@ -83,10 +84,13 @@ require(
 
         var thirdTextInput = inputManager
             .create( 'text', 'third-text', mainCanvas )
+            .setValue( 'Hola mundo' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
-            .setInputPosition( 100, 120, 0 );
+            .setInputPosition( 50, 100, 0 );
         mainCanvas.add( thirdTextInput.getElement() );
+
+
 
         var raycaster = new RayCaster( { camera: mainCanvas.getCamera(), inputManager: inputManager } );
 

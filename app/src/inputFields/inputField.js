@@ -14,13 +14,13 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         value                           :   '',
         inputType                       :   '',
-        spriteInputFieldElement         :   '',
         isDirty                         :   true,
         size                            :   10,
         useScreenCoordinates            :   false,
         canvasContainer                 :   '',
         inputPosition                   :   { x: 0, y: 0, z: 0 },
         inputManager                    :   '',
+        inputElement                    :   '',
 
         initialize: function() {
 
@@ -35,9 +35,9 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
          *
          */
 
-        drawSpriteInputFieldElement: function() {
+        drawInputElement: function() {
 
-            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'drawSpriteInputFieldElement' function" );
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'drawInputElement' function" );
 
         },
 
@@ -92,11 +92,11 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         getElement: function() {
 
             if ( this.isDirty == true ) {
-                this.drawSpriteInputFieldElement();
+                this.drawInputElement();
             }
 
             this.isDirty = false;
-            return this.spriteInputFieldElement;
+            return this.inputElement;
 
         },
 
@@ -161,7 +161,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         setCanvasContainer: function( canvas ) {
 
             if( typeof canvas === 'undefined' ) {
-                console.log( 'The canvas is needed' );
+                console.error( 'The canvas is needed' );
             } else {
                 this.canvasContainer = canvas;
             }
@@ -205,16 +205,16 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
-        setSpriteInputFieldElement: function( spriteInputFieldElement ) {
+        setInputElement: function( inputElement ) {
 
-            this.spriteInputFieldElement = spriteInputFieldElement;
+            this.inputElement = inputElement;
             return this;
 
         },
 
-        getSpriteInputFieldElement: function() {
+        getInputElement: function() {
 
-            return this.spriteInputFieldElement;
+            return this.inputElement;
 
         }
 
