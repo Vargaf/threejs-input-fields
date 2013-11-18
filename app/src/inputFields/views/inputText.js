@@ -47,6 +47,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
             this.inputType = 'text';
 
             this.getInputCursor().setCursorPosition( 0 );
+            this.setInputTextPosition( 0, 0, 0 );
 
             var canvas = document.createElement('canvas');
 

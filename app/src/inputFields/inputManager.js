@@ -339,6 +339,24 @@ define(
 
         },
 
+        getOutside3DEnviromentInputs: function() {
+
+            var inputs = [];
+            var inputLoaded = '';
+
+            for( index in this.inputsLoaded ) {
+
+                inputLoaded = this.inputsLoaded[ index ];
+                if( inputLoaded.getUseScreenCoordinates() == true ) {
+                    inputs.push( inputLoaded.getInputElement() );
+                }
+
+            }
+
+            return inputs;
+
+        },
+
         setCamera: function( camera ) {
 
             if( typeof camera === 'undefined' ) {
