@@ -249,7 +249,11 @@ define(
 
         addKeyDownValue: function( value ) {
 
-            this.inputsLoaded[ this.focusedElement ].addKeyDownValue( value );
+            var focusedElement = this.getFocusedElement();
+
+            if( false != focusedElement ) {
+                focusedElement.addKeyDownValue( value );
+            }
 
         },
 
