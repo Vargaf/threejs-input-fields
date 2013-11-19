@@ -16,6 +16,7 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         isDirty                 :   false,
         projector               :   '',
         raycaster               :   '',
+        intersectedElement      :   false,
 
 
         initialize: function() {
@@ -30,6 +31,7 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             this.raycaster = new THREE.Raycaster();
 
             document.addEventListener( 'mousemove', raycasterClassTHIS.onDocumentMouseMove, false );
+            document.addEventListener( 'click', raycasterClassTHIS.onDocumentMouseClick, false );
 
         },
 
@@ -86,15 +88,21 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        onDocumentMouseClick:function( event ) {
+
+            if( false != raycasterClassTHIS.intersectedElement ) {
+
+                raycasterClassTHIS.getInputManager().setFocusedElement( raycasterClassTHIS.intersectedElement );
+
+            }
+
+        },
+
         requestAnimationFrame: function() {
 
             if( this.isDirty ) {
 
-                var inputElement = this.getIntersectedInputField();
-
-                if( false != inputElement ) {
-                    console.log( 'intersection' );
-                }
+                this.intersectedElement = this.getIntersectedInputField();
 
                 this.isDirty = false;
             }

@@ -506,7 +506,12 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         setInputTextValue: function( context, message ) {
             context.fillStyle = "rgba(" + this.fontColor.r + ", " + this.fontColor.g + ", " + this.fontColor.b + ", " + this.fontColor.a + ")";
             context.fillText( message, this.getInputTextPosition().x, this.getInputTextPosition().y );
-            this.getInputCursor().drawCursor( this );
+
+            if( this.getHasFocus() ) {
+
+                this.getInputCursor().drawCursor( this );
+
+            }
         },
 
         displaceInputValue: function() {

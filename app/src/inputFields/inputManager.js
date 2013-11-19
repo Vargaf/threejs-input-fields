@@ -225,8 +225,6 @@ define(
                     inputFieldExists = false;
             }
 
-            this.focusedElement = inputId;
-
             if( inputFieldExists ) {
 
                 this.inputsLoaded[ inputId ].setInputManager( this );
@@ -270,24 +268,17 @@ define(
          */
         requestAnimationFrame: function() {
 
-            var focusedInput = this.inputsLoaded[ this.focusedElement ];
-            if( focusedInput.isDirty ) {
+            var focusedInput = this.getFocusedElement();
+            if( false != focusedInput && focusedInput.isDirty ) {
 
-                //focusedInput.canvasContainer.refreshElement( focusedInput.getElement(), focusedInput.id );
                 focusedInput.drawInputElement();
 
-                if( focusedInput.hasCursor() ) {
-
-
-
-                }
             }
 
             // Show the text cursor if it is needed
-            focusedInput = this.inputsLoaded[ this.focusedElement ];
-            if( focusedInput.inputType == 'text' ) {
+            if( false != focusedInput && focusedInput.inputType == 'text' ) {
 
-                if( focusedInput.hasCursor() ) {
+                if( focusedInput.hasCursor() && focusedInput.getHasFocus() ) {
 
                     this.cursorElement.blink( focusedInput );
 
@@ -371,6 +362,37 @@ define(
         getCamera: function() {
 
             return this.camera;
+
+        },
+
+        setFocusedElement: function( newFocusedElement ) {
+
+            var focusedElement = this.getFocusedElement();
+
+            if( false != focusedElement ) {
+
+                focusedElement.setHasFocus( false );
+                focusedElement.makeTextSprite();
+
+            }
+
+            if( typeof newFocusedElement.object == 'undefined' ) {
+
+                // For sprite inputFields "outside" the scene
+                newFocusedElement = this.inputsLoaded[ newFocusedElement.id ];
+                newFocusedElement.setHasFocus( true );
+                this.focusedElement = newFocusedElement.id;
+
+            } else {
+
+                newFocusedElement = this.inputsLoaded[ newFocusedElement.object.id ];
+                newFocusedElement.setHasFocus( true );
+                this.focusedElement = newFocusedElement.id;
+
+            }
+
+
+            return this;
 
         }
 

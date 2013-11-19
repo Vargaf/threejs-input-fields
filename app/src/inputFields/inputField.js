@@ -21,6 +21,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         inputPosition                   :   { x: 0, y: 0, z: 0 },
         inputManager                    :   '',
         inputElement                    :   '',
+        hasFocus                        :   false,
 
         initialize: function() {
 
@@ -216,7 +217,21 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
             return this.inputElement;
 
-        }
+        },
+
+        setHasFocus: function( value ) {
+
+            this.isDirty = true;
+            this.hasFocus = value;
+            return this;
+
+        },
+
+        getHasFocus: function() {
+
+            return this.hasFocus;
+
+        },
 
     });
 
