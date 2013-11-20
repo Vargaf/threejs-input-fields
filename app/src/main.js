@@ -55,6 +55,7 @@ require(
         $,
         RayCaster )
     {
+        var orthographicElement = true;
         var animationController = new AnimationControllerClass();
 
         mainCanvas = new CanvasElementClass( { el: $( "body" ) } );
@@ -62,28 +63,28 @@ require(
         var exampleObjects = new ExampleObjectsClass();
         mainCanvas.add( exampleObjects.getObjects() );
 
-        var inputManager = new InputManagerClass( { camera: mainCanvas.getCamera() } );
+        var inputManager = new InputManagerClass();
 
         var firstTextInput = inputManager
-            .create( 'text', 'first-text', mainCanvas )
+            .create( 'text', 'first-text' )
             .setValue( 'Hola mundo' )
             .setUseScreenCoordinates( true )
             .setFontSize( 40 )
             .setBorderSize( 2 )
             .setInputPosition( 10, 10, 0 );
-        mainCanvas.add( firstTextInput.getElement() );
+        mainCanvas.add( firstTextInput.getElement(), orthographicElement );
 
         var secondTextInput = inputManager
-            .create( 'text', 'second-text', mainCanvas )
+            .create( 'text', 'second-text' )
             .setUseScreenCoordinates( true )
             .setValue( 'Hola mundo' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 220, 10, 0 );
-        mainCanvas.add( secondTextInput.getElement() );
+        mainCanvas.add( secondTextInput.getElement(), orthographicElement );
 
         var thirdTextInput = inputManager
-            .create( 'text', 'third-text', mainCanvas )
+            .create( 'text', 'third-text' )
             .setValue( 'Hola mundo' )
             .setFontSize( 20 )
             .setBorderSize( 2 )

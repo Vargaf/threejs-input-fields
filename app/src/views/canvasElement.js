@@ -13,11 +13,18 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
         scene                       :   '',
         camera                      :   '',
+        cameraOrtho                 :   '',
+        sceneOrtho                  :   '',
         renderer                    :   '',
         controls                    :   '',
         className                   :   'canvas-element',
 
         initialize: function(){
+
+            canvasElementThis = this;
+
+            this.cameraOrtho = new THREE.OrthographicCamera( 0, window.innerWidth, window.innerHeight, 0, - 10, 10 );
+            this.sceneOrtho = new THREE.Scene();
 
             this.scene = new THREE.Scene();
             this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 20000 );
@@ -36,6 +43,9 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
                 });
 
                 this.renderer.setClearColor( 0x000000, 1 );
+
+                this.renderer.autoClear = false; // To allow render overlay on top of sprited sphere
+
                 // uncomment if webgl is required
                 //}else{
                 //	Detector.addGetWebGLMessage();
@@ -56,6 +66,8 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
             this.render();
 
+            window.addEventListener( 'resize', this.onWindowResize, false );
+
         },
 
         render: function(){
@@ -68,7 +80,13 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
             $( "body" ).append( canvasElement );
         },
 
-        add: function( object ) {
+        /**
+         * Adds the element to the normal scene or orthographic scene
+         *
+         * @param object
+         * @param orthographicElement
+         */
+        add: function( object, orthographicElement ) {
 
             if( typeof object == "undefined" ) {
 
@@ -77,7 +95,15 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
             }
 
-            this.scene.add( object );
+            if( orthographicElement ){
+
+                this.sceneOrtho.add( object );
+
+            } else {
+
+                this.scene.add( object );
+
+            }
 
         },
 
@@ -110,7 +136,9 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
         renderCanvas: function() {
 
+            this.renderer.clear();
             this.renderer.render( this.scene, this.camera );
+            this.renderer.render( this.sceneOrtho, this.cameraOrtho );
 
         },
 
@@ -122,9 +150,24 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
 
         getCamera: function() {
             return this.camera;
+        },
+
+        getCameraOrtho: function() {
+            return this.cameraOrtho;
+        },
+
+        getSceneOrtho: function() {
+            return this.sceneOrtho;
+        },
+
+        onWindowResize: function() {
+
+            canvasElementThis.camera.aspect = window.innerWidth / window.innerHeight;
+            canvasElementThis.camera.updateProjectionMatrix();
+
+            canvasElementThis.renderer.setSize( window.innerWidth, window.innerHeight );
+
         }
-
-
     });
 
     return canvasElementClass;

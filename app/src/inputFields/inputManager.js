@@ -39,10 +39,14 @@ define(
         cursorElement               :   false,
         lastCameraPosition          :   { x: 0, y: 0, z: 0 },
         camera                      :   '',
+        cameraOrtho                 :   '',
+        sceneOrtho                  :   '',
 
         initialize: function() {
 
-            this.setCamera( this.attributes.camera );
+//            this.setCamera( this.attributes.camera );
+//            this.setCameraOrtho( this.attributes.cameraOrtho );
+//            this.setSceneOrtho( this.attributes.sceneOrtho );
 
             inputManagerClassTHIS = this;
 
@@ -84,7 +88,7 @@ define(
             Mousetrap.bind( 'end',          inputManagerClassTHIS.inputCursorEnd );
             Mousetrap.bind( 'home',          inputManagerClassTHIS.inputCursorStart );
 
-
+            window.addEventListener( 'resize', this.onWindowResize, false );
 
         },
 
@@ -198,11 +202,10 @@ define(
          *
          * @param type                  Type of input field
          * @param inputId               Input id
-         * @param canvasContainer       Canvas on where teh input is drawn
          *
          * @returns {boolean}
          */
-        create: function( type, inputId, canvasContainer ) {
+        create: function( type, inputId ) {
 
             if( !this.inputTypesEnabled.hasOwnProperty( type ) ) {
 
@@ -217,7 +220,7 @@ define(
             {
                 case this.inputTypesEnabled.text :
 
-                    this.inputsLoaded[ inputId ] = new InputText( { id: inputId, canvas: canvasContainer, inputManager: this } );
+                    this.inputsLoaded[ inputId ] = new InputText( { id: inputId, inputManager: this } );
                     break;
 
                 default:
@@ -369,6 +372,40 @@ define(
 
         },
 
+        setCameraOrtho: function( cameraOrtho ) {
+
+            if( typeof camera === 'undefined' ) {
+                console.log( 'The cameraOrtho is needed' );
+            } else {
+                this.cameraOrtho = cameraOrtho;
+            }
+
+            return this;
+        },
+
+        getCameraOrtho: function() {
+
+            return this.cameraOrtho;
+
+        },
+
+        setSceneOrtho: function( sceneOrtho ) {
+
+            if( typeof scene === 'undefined' ) {
+                console.log( 'The sceneOrtho is needed' );
+            } else {
+                this.sceneOrtho = sceneOrtho;
+            }
+
+            return this;
+        },
+
+        getSceneOrtho: function() {
+
+            return this.sceneOrtho;
+
+        },
+
         setFocusedElement: function( newFocusedElement ) {
 
             var focusedElement = this.getFocusedElement();
@@ -397,6 +434,16 @@ define(
 
 
             return this;
+
+        },
+
+        onWindowResize: function() {
+
+            inputManagerClassTHIS.cameraOrtho.right = window.innerWidth;
+            inputManagerClassTHIS.cameraOrtho.top = window.innerHeight;
+            inputManagerClassTHIS.cameraOrtho.updateProjectionMatrix();
+
+            inputManagerClassTHIS.updateHUDSprites();
 
         }
 

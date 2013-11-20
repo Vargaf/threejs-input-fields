@@ -23,10 +23,10 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         inputElement                    :   '',
         hasFocus                        :   false,
 
-        initialize: function() {
+        initialize: function( arguments ) {
 
-            this.setCanvasContainer( this.options.canvas );
-            this.setInputManager( this.options.inputManager );
+            //this.setCanvasContainer( arguments.canvas );
+            this.setInputManager( arguments.inputManager );
 
         },
 

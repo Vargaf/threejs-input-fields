@@ -15,7 +15,7 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         fontSize                        :   18,
         fontFamily                      :   'Arial',
         fontColor                       :   { r:0, g:0, b:0, a:1.0 },
-        spriteAlignment                 :   THREE.SpriteAlignment.topLeft,
+        spriteAlignment                 :   '', //THREE.SpriteAlignment.topLeft,
         borderSize                      :   1,
         borderColor                     :   { r:0, g:0, b:0, a:1.0 },
         backgroundColor                 :   { r:255, g:255, b:255, a:1.0 },
@@ -40,9 +40,9 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
         inputCanvasId                   :   '',
         inside3DSpaceCollisionDetector  :   '',
 
-        initialize: function( arguments ) {
+        initialize: function() {
 
-            InputFieldClass.prototype.initialize.apply(this, arguments);
+            InputFieldClass.prototype.initialize.apply( this, arguments );
 
             this.inputType = 'text';
 
