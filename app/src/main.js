@@ -71,7 +71,7 @@ require(
             .setUseScreenCoordinates( true )
             .setFontSize( 40 )
             .setBorderSize( 2 )
-            .setInputPosition( 10, 10, 0 );
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_LEFT );
         mainCanvas.add( firstTextInput.getElement(), orthographicElement );
 
         var secondTextInput = inputManager
@@ -80,7 +80,7 @@ require(
             .setValue( 'Hola mundo' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
-            .setInputPosition( 220, 10, 0 );
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_RIGHT );
         mainCanvas.add( secondTextInput.getElement(), orthographicElement );
 
         var thirdTextInput = inputManager

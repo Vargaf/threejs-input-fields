@@ -12,6 +12,13 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
     var inputFieldClass = Backbone.View.extend({
 
+
+        POSITION_TOP_LEFT               :   'tl',
+        POSITION_TOP_RIGHT              :   'tr',
+        POSITION_BOTTOM_LEFT            :   'bl',
+        POSITION_BOTTOM_RIGHT           :   'br',
+        POSITION_CENTER                 :   'c',
+
         value                           :   '',
         inputType                       :   '',
         isDirty                         :   true,
@@ -19,9 +26,11 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         useScreenCoordinates            :   false,
         canvasContainer                 :   '',
         inputPosition                   :   { x: 0, y: 0, z: 0 },
+        inputRealPosition               :   '',
         inputManager                    :   '',
         inputElement                    :   '',
         hasFocus                        :   false,
+        position                        :   'tl',
 
         initialize: function( arguments ) {
 
@@ -145,17 +154,25 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
-        setInputPosition: function( px, py, pz) {
+        setInputPosition: function( px, py, pz, position ) {
 
             this.isDirty = true;
             this.inputPosition = { x: px, y: py, z: pz };
+
+            this.setPosition( position );
+            this.inputRealPosition = false;
+
             return this;
 
         },
 
         getInputPosition: function() {
 
-            return this.inputPosition;
+            if( this.inputRealPosition == false ) {
+                this.inputRealPosition = this.calculateOfsetCoordinatesByPosition();
+            }
+
+            return this.inputRealPosition;
 
         },
 
@@ -232,6 +249,87 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             return this.hasFocus;
 
         },
+
+        setPosition: function( position ) {
+
+            var positionExists = position == this.POSITION_TOP_LEFT;
+            positionExists = positionExists || position == this.POSITION_TOP_RIGHT;
+            positionExists = positionExists || position == this.POSITION_BOTTOM_LEFT;
+            positionExists = positionExists || position == this.POSITION_BOTTOM_RIGHT;
+            positionExists = positionExists || position == this.POSITION_CENTER;
+
+
+            if( !positionExists ) {
+
+                console.error( 'The given position for the input field does not exists.' );
+
+            } else {
+
+                this.position = position;
+
+            }
+
+            return this;
+
+        },
+
+        getPosition: function() {
+
+            return this.position;
+
+        },
+
+        /**
+         * Calculate the input displacement to set it on the correct position desired by the corners and center position
+         *
+         * @returns { x, y, z }
+         */
+        calculateOfsetCoordinatesByPosition: function() {
+
+            var offset = this.inputPosition;
+            var offsetXDirection = 1;
+            var offsetYDirection = 1;
+
+            if( this.position == this.POSITION_BOTTOM_RIGHT || this.position == this.POSITION_TOP_RIGHT ) {
+
+                offsetXDirection = -1;
+
+            }
+            if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+
+                offsetYDirection = -1;
+
+            }
+
+            if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_TOP_RIGHT ) {
+
+                offset.y = ( offsetYDirection * offset.y ) + ( window.innerHeight - this.canvas.height / 2 );
+            }
+
+            if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+
+                offset.y = ( offsetYDirection * offset.y ) + this.canvas.height / 2;
+            }
+
+            if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_BOTTOM_LEFT ) {
+
+                offset.x = ( offsetXDirection * offset.x ) + this.canvas.width / 2;
+            }
+
+            if( this.position == this.POSITION_TOP_RIGHT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+
+                offset.x = ( offsetXDirection * offset.x ) + ( window.innerWidth - this.canvas.width / 2 );
+            }
+
+            if( this.position == this.POSITION_CENTER ) {
+
+                offset.x +=  window.innerWidth * 0.5;
+                offset.y +=  window.innerHeight * 0.5;
+
+            }
+
+            return offset;
+        }
 
     });
 

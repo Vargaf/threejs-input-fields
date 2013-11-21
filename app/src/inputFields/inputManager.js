@@ -27,7 +27,13 @@ define(
 
     inputManagerClass = Backbone.Model.extend({
 
-        inputTypesEnabled           :   {
+        POSITION_TOP_LEFT               :   'tl',
+        POSITION_TOP_RIGHT              :   'tr',
+        POSITION_BOTTOM_LEFT            :   'bl',
+        POSITION_BOTTOM_RIGHT           :   'br',
+        POSITION_CENTER                 :   'c',
+
+        inputTypesEnabled               :   {
             'text'      :     1
         },
 
