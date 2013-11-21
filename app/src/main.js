@@ -67,8 +67,7 @@ require(
 
         var firstTextInput = inputManager
             .create( 'text', 'first-text', orthographicElement )
-            .setValue( 'Hola mundo' )
-            .setUseScreenCoordinates( true )
+            .setValue( 'First text' )
             .setFontSize( 40 )
             .setBorderSize( 2 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_LEFT );
@@ -76,8 +75,7 @@ require(
 
         var secondTextInput = inputManager
             .create( 'text', 'second-text', orthographicElement )
-            .setUseScreenCoordinates( true )
-            .setValue( 'Hola mundo' )
+            .setValue( 'Second text' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_RIGHT );
@@ -85,7 +83,7 @@ require(
 
         var thirdTextInput = inputManager
             .create( 'text', 'third-text' )
-            .setValue( 'Hola mundo' )
+            .setValue( 'Third text' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 50, 100, 0 );
@@ -94,8 +92,7 @@ require(
 
         var fourthTextInput = inputManager
             .create( 'text', 'fourth-text', orthographicElement )
-            .setUseScreenCoordinates( true )
-            .setValue( 'Hola mundo' )
+            .setValue( 'Fourth text' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_RIGHT );
@@ -103,8 +100,7 @@ require(
 
         var fifthTextInput = inputManager
             .create( 'text', 'fifth-text', orthographicElement )
-            .setUseScreenCoordinates( true )
-            .setValue( 'Hola mundo' )
+            .setValue( 'Fifth text' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_LEFT );
@@ -112,8 +108,7 @@ require(
 
         var sixthTextInput = inputManager
             .create( 'text', 'sixth-text', orthographicElement )
-            .setUseScreenCoordinates( true )
-            .setValue( 'Hola mundo' )
+            .setValue( 'Sixth text' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_CENTER );

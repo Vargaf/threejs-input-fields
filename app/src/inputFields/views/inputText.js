@@ -427,10 +427,10 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
 
             if( this.inputCanvasId === '' ) {
 
-                if( this.getUseScreenCoordinates() ) {
+                if( this.getOrthographicView() ) {
 
                     var inputElementMaterial = new THREE.SpriteMaterial(
-                        { map: texture, transparent: true, useScreenCoordinates: this.getUseScreenCoordinates(), alignment: this.getSpriteAlignment() } );
+                        { map: texture, transparent: true } );
 
                     inputElement = new THREE.Sprite( inputElementMaterial );
 

@@ -326,7 +326,7 @@ define(
             for( index in this.inputsLoaded ) {
 
                 inputLoaded = this.inputsLoaded[ index ];
-                if( inputLoaded.getUseScreenCoordinates() == false ) {
+                if( inputLoaded.getOrthographicView() == false ) {
                     inputs.push( inputLoaded.getInputElement() );
                 }
 
@@ -344,8 +344,8 @@ define(
             for( index in this.inputsLoaded ) {
 
                 inputLoaded = this.inputsLoaded[ index ];
-                if( inputLoaded.getUseScreenCoordinates() == true ) {
-                    inputs.push( inputLoaded.getInputElement() );
+                if( inputLoaded.getOrthographicView() == true ) {
+                    inputs.push( inputLoaded );
                 }
 
             }

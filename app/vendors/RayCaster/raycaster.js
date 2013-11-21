@@ -135,17 +135,31 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
             var outside3DEnviromentInputs = this.getInputManager().getOutside3DEnviromentInputs();
             var inputField = false;
+            var inputFieldPosition = false;
+            var inputFieldElement = false;
             var intersectedElement = false;
+
+            var xIni = 0;
+            var xEnd = 0;
+            var yIni = 0;
+            var yEnd = 0;
 
             for( var index in outside3DEnviromentInputs ) {
 
                 inputField = outside3DEnviromentInputs[ index ];
+                inputFieldPosition = inputField.getInputPosition();
+                inputFieldElement = inputField.getInputElement();
+
+                xIni = inputFieldPosition.x - inputFieldElement.scale.x / 2;
+                xEnd = ( inputFieldPosition.x + inputFieldElement.scale.x / 2);
+                yIni = window.innerHeight - ( inputFieldPosition.y + inputFieldElement.scale.y / 2 );
+                yEnd = window.innerHeight - ( inputFieldPosition.y - inputFieldElement.scale.y / 2 );
 
                 if(
-                    ( inputField.position.x <= this.mouseX && this.mouseX <= inputField.position.x + inputField.scale.x ) &&
-                    ( inputField.position.y <= this.mouseY && this.mouseY <= inputField.position.y + inputField.scale.y )
+                    ( xIni <= this.mouseX && this.mouseX <= xEnd ) &&
+                    ( yIni <= this.mouseY && this.mouseY <= yEnd )
                 ) {
-                    intersectedElement = inputField ;
+                    intersectedElement = inputFieldElement ;
                     break;
                 }
 

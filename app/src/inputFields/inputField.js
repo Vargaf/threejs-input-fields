@@ -23,7 +23,6 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         inputType                       :   '',
         isDirty                         :   true,
         size                            :   10,
-        useScreenCoordinates            :   false,
         canvasContainer                 :   '',
         inputPosition                   :   { x: 0, y: 0, z: 0 },
         inputRealPosition               :   '',
@@ -141,19 +140,6 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             this.size = size;
 
             return this;
-        },
-
-        setUseScreenCoordinates: function( value ) {
-
-            this.useScreenCoordinates = value;
-            return this;
-
-        },
-
-        getUseScreenCoordinates: function() {
-
-            return this.useScreenCoordinates;
-
         },
 
         setInputPosition: function( px, py, pz, position ) {
@@ -317,41 +303,31 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                 var offsetYDirection = 1;
 
                 if( this.position == this.POSITION_BOTTOM_RIGHT || this.position == this.POSITION_TOP_RIGHT ) {
-
                     offsetXDirection = -1;
-
                 }
                 if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
-
                     offsetYDirection = -1;
-
                 }
 
                 if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_TOP_RIGHT ) {
-
                     offset.y = ( offsetYDirection * offset.y ) + ( window.innerHeight - this.canvas.height / 2 );
                 }
 
                 if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
-
                     offset.y = ( offsetYDirection * offset.y ) + this.canvas.height / 2;
                 }
 
                 if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_BOTTOM_LEFT ) {
-
                     offset.x = ( offsetXDirection * offset.x ) + this.canvas.width / 2;
                 }
 
                 if( this.position == this.POSITION_TOP_RIGHT || this.position == this.POSITION_BOTTOM_RIGHT ) {
-
                     offset.x = ( offsetXDirection * offset.x ) + ( window.innerWidth - this.canvas.width / 2 );
                 }
 
                 if( this.position == this.POSITION_CENTER ) {
-
                     offset.x +=  window.innerWidth * 0.5;
                     offset.y +=  window.innerHeight * 0.5;
-
                 }
 
             }
