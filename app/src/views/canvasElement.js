@@ -165,6 +165,10 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
             canvasElementThis.camera.aspect = window.innerWidth / window.innerHeight;
             canvasElementThis.camera.updateProjectionMatrix();
 
+            canvasElementThis.cameraOrtho.right = window.innerWidth;
+            canvasElementThis.cameraOrtho.top = window.innerHeight;
+            canvasElementThis.cameraOrtho.updateProjectionMatrix();
+
             canvasElementThis.renderer.setSize( window.innerWidth, window.innerHeight );
 
         }

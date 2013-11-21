@@ -31,11 +31,13 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         inputElement                    :   '',
         hasFocus                        :   false,
         position                        :   'tl',
+        orthographicView                :   false,
 
         initialize: function( arguments ) {
 
             //this.setCanvasContainer( arguments.canvas );
             this.setInputManager( arguments.inputManager );
+            this.setOrthographicView( arguments.orthographicView );
 
         },
 
@@ -210,6 +212,23 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        setOrthographicView: function( orthographicView ) {
+
+            if( typeof orthographicView === 'undefined' ) {
+                this.orthographicView = false;
+            } else {
+                this.orthographicView = orthographicView;
+            }
+            return this;
+
+        },
+
+        getOrthographicView: function() {
+
+            return this.orthographicView;
+
+        },
+
         getIsDirty: function() {
 
             return this.isDirty;
@@ -252,20 +271,24 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         setPosition: function( position ) {
 
-            var positionExists = position == this.POSITION_TOP_LEFT;
-            positionExists = positionExists || position == this.POSITION_TOP_RIGHT;
-            positionExists = positionExists || position == this.POSITION_BOTTOM_LEFT;
-            positionExists = positionExists || position == this.POSITION_BOTTOM_RIGHT;
-            positionExists = positionExists || position == this.POSITION_CENTER;
+            if( this.orthographicView ) {
+
+                var positionExists = position == this.POSITION_TOP_LEFT;
+                positionExists = positionExists || position == this.POSITION_TOP_RIGHT;
+                positionExists = positionExists || position == this.POSITION_BOTTOM_LEFT;
+                positionExists = positionExists || position == this.POSITION_BOTTOM_RIGHT;
+                positionExists = positionExists || position == this.POSITION_CENTER;
 
 
-            if( !positionExists ) {
+                if( !positionExists ) {
 
-                console.error( 'The given position for the input field does not exists.' );
+                    console.error( 'The given position for the input field does not exists.' );
 
-            } else {
+                } else {
 
-                this.position = position;
+                    this.position = position;
+
+                }
 
             }
 
@@ -287,44 +310,49 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         calculateOfsetCoordinatesByPosition: function() {
 
             var offset = this.inputPosition;
-            var offsetXDirection = 1;
-            var offsetYDirection = 1;
 
-            if( this.position == this.POSITION_BOTTOM_RIGHT || this.position == this.POSITION_TOP_RIGHT ) {
+            if( this.orthographicView ) {
 
-                offsetXDirection = -1;
+                var offsetXDirection = 1;
+                var offsetYDirection = 1;
 
-            }
-            if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+                if( this.position == this.POSITION_BOTTOM_RIGHT || this.position == this.POSITION_TOP_RIGHT ) {
 
-                offsetYDirection = -1;
+                    offsetXDirection = -1;
 
-            }
+                }
+                if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
 
-            if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_TOP_RIGHT ) {
+                    offsetYDirection = -1;
 
-                offset.y = ( offsetYDirection * offset.y ) + ( window.innerHeight - this.canvas.height / 2 );
-            }
+                }
 
-            if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+                if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_TOP_RIGHT ) {
 
-                offset.y = ( offsetYDirection * offset.y ) + this.canvas.height / 2;
-            }
+                    offset.y = ( offsetYDirection * offset.y ) + ( window.innerHeight - this.canvas.height / 2 );
+                }
 
-            if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_BOTTOM_LEFT ) {
+                if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
 
-                offset.x = ( offsetXDirection * offset.x ) + this.canvas.width / 2;
-            }
+                    offset.y = ( offsetYDirection * offset.y ) + this.canvas.height / 2;
+                }
 
-            if( this.position == this.POSITION_TOP_RIGHT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+                if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_BOTTOM_LEFT ) {
 
-                offset.x = ( offsetXDirection * offset.x ) + ( window.innerWidth - this.canvas.width / 2 );
-            }
+                    offset.x = ( offsetXDirection * offset.x ) + this.canvas.width / 2;
+                }
 
-            if( this.position == this.POSITION_CENTER ) {
+                if( this.position == this.POSITION_TOP_RIGHT || this.position == this.POSITION_BOTTOM_RIGHT ) {
 
-                offset.x +=  window.innerWidth * 0.5;
-                offset.y +=  window.innerHeight * 0.5;
+                    offset.x = ( offsetXDirection * offset.x ) + ( window.innerWidth - this.canvas.width / 2 );
+                }
+
+                if( this.position == this.POSITION_CENTER ) {
+
+                    offset.x +=  window.innerWidth * 0.5;
+                    offset.y +=  window.innerHeight * 0.5;
+
+                }
 
             }
 

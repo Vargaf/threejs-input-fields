@@ -66,22 +66,22 @@ require(
         var inputManager = new InputManagerClass();
 
         var firstTextInput = inputManager
-            .create( 'text', 'first-text' )
+            .create( 'text', 'first-text', orthographicElement )
             .setValue( 'Hola mundo' )
             .setUseScreenCoordinates( true )
             .setFontSize( 40 )
             .setBorderSize( 2 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_LEFT );
-        mainCanvas.add( firstTextInput.getElement(), orthographicElement );
+        mainCanvas.add( firstTextInput.getElement(), firstTextInput.getOrthographicView() );
 
         var secondTextInput = inputManager
-            .create( 'text', 'second-text' )
+            .create( 'text', 'second-text', orthographicElement )
             .setUseScreenCoordinates( true )
             .setValue( 'Hola mundo' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_RIGHT );
-        mainCanvas.add( secondTextInput.getElement(), orthographicElement );
+        mainCanvas.add( secondTextInput.getElement(), secondTextInput.getOrthographicView() );
 
         var thirdTextInput = inputManager
             .create( 'text', 'third-text' )
@@ -92,6 +92,32 @@ require(
         mainCanvas.add( thirdTextInput.getElement() );
 
 
+        var fourthTextInput = inputManager
+            .create( 'text', 'fourth-text', orthographicElement )
+            .setUseScreenCoordinates( true )
+            .setValue( 'Hola mundo' )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_RIGHT );
+        mainCanvas.add( fourthTextInput.getElement(), fourthTextInput.getOrthographicView() );
+
+        var fifthTextInput = inputManager
+            .create( 'text', 'fifth-text', orthographicElement )
+            .setUseScreenCoordinates( true )
+            .setValue( 'Hola mundo' )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_LEFT );
+        mainCanvas.add( fifthTextInput.getElement(), fifthTextInput.getOrthographicView() );
+
+        var sixthTextInput = inputManager
+            .create( 'text', 'sixth-text', orthographicElement )
+            .setUseScreenCoordinates( true )
+            .setValue( 'Hola mundo' )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_CENTER );
+        mainCanvas.add( sixthTextInput.getElement(), sixthTextInput.getOrthographicView() );
 
         var raycaster = new RayCaster( { camera: mainCanvas.getCamera(), inputManager: inputManager } );
 

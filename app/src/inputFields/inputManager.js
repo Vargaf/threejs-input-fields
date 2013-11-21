@@ -44,15 +44,8 @@ define(
         ignoreKey                   :   false,
         cursorElement               :   false,
         lastCameraPosition          :   { x: 0, y: 0, z: 0 },
-        camera                      :   '',
-        cameraOrtho                 :   '',
-        sceneOrtho                  :   '',
 
         initialize: function() {
-
-//            this.setCamera( this.attributes.camera );
-//            this.setCameraOrtho( this.attributes.cameraOrtho );
-//            this.setSceneOrtho( this.attributes.sceneOrtho );
 
             inputManagerClassTHIS = this;
 
@@ -211,7 +204,7 @@ define(
          *
          * @returns {boolean}
          */
-        create: function( type, inputId ) {
+        create: function( type, inputId, orthographicView ) {
 
             if( !this.inputTypesEnabled.hasOwnProperty( type ) ) {
 
@@ -226,7 +219,7 @@ define(
             {
                 case this.inputTypesEnabled.text :
 
-                    this.inputsLoaded[ inputId ] = new InputText( { id: inputId, inputManager: this } );
+                    this.inputsLoaded[ inputId ] = new InputText( { 'id': inputId, 'inputManager': this, 'orthographicView': orthographicView } );
                     break;
 
                 default:
@@ -361,57 +354,6 @@ define(
 
         },
 
-        setCamera: function( camera ) {
-
-            if( typeof camera === 'undefined' ) {
-                console.log( 'The camera is needed' );
-            } else {
-                this.camera = camera;
-            }
-
-            return this;
-        },
-
-        getCamera: function() {
-
-            return this.camera;
-
-        },
-
-        setCameraOrtho: function( cameraOrtho ) {
-
-            if( typeof camera === 'undefined' ) {
-                console.log( 'The cameraOrtho is needed' );
-            } else {
-                this.cameraOrtho = cameraOrtho;
-            }
-
-            return this;
-        },
-
-        getCameraOrtho: function() {
-
-            return this.cameraOrtho;
-
-        },
-
-        setSceneOrtho: function( sceneOrtho ) {
-
-            if( typeof scene === 'undefined' ) {
-                console.log( 'The sceneOrtho is needed' );
-            } else {
-                this.sceneOrtho = sceneOrtho;
-            }
-
-            return this;
-        },
-
-        getSceneOrtho: function() {
-
-            return this.sceneOrtho;
-
-        },
-
         setFocusedElement: function( newFocusedElement ) {
 
             var focusedElement = this.getFocusedElement();
@@ -440,16 +382,6 @@ define(
 
 
             return this;
-
-        },
-
-        onWindowResize: function() {
-
-            inputManagerClassTHIS.cameraOrtho.right = window.innerWidth;
-            inputManagerClassTHIS.cameraOrtho.top = window.innerHeight;
-            inputManagerClassTHIS.cameraOrtho.updateProjectionMatrix();
-
-            inputManagerClassTHIS.updateHUDSprites();
 
         }
 
