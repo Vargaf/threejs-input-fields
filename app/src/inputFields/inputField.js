@@ -34,7 +34,6 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         initialize: function( arguments ) {
 
-            //this.setCanvasContainer( arguments.canvas );
             this.setInputManager( arguments.inputManager );
             this.setOrthographicView( arguments.orthographicView );
 
@@ -295,7 +294,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
          */
         calculateOfsetCoordinatesByPosition: function() {
 
-            var offset = this.inputPosition;
+            var offset = { x: this.inputPosition.x, y: this.inputPosition.y, z: this.inputPosition.z };
 
             if( this.orthographicView ) {
 
@@ -333,7 +332,17 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             }
 
             return offset;
-        }
+        },
+
+        onWindowResizeUpdatePosition: function() {
+
+            this.inputRealPosition = false
+            var position = this.getInputPosition();
+            var element = this.getElement();
+
+            element.position.set( position.x, position.y, position.z );
+
+        },
 
     });
 

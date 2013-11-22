@@ -383,6 +383,18 @@ define(
 
             return this;
 
+        },
+
+        updateOrthographicInputFieldsPositions: function() {
+
+            var inputFields = this.getOutside3DEnviromentInputs();
+
+            for( index in inputFields ) {
+
+                inputFields[ index ].onWindowResizeUpdatePosition();
+
+            }
+
         }
 
     });

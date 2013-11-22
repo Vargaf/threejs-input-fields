@@ -18,6 +18,7 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
         renderer                    :   '',
         controls                    :   '',
         className                   :   'canvas-element',
+        inputManager                :   false,
 
         initialize: function(){
 
@@ -160,6 +161,21 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
             return this.sceneOrtho;
         },
 
+        setInputManager: function( inputManager ) {
+
+            if( inputManager instanceof inputManagerClass == false) {
+                console.error( 'The input manager given must be an inputManagerClass object' );
+            } else {
+                this.inputManager = inputManager;
+            }
+
+            return this;
+        },
+
+        getInputManager: function() {
+            return this.inputManager;
+        },
+
         onWindowResize: function() {
 
             canvasElementThis.camera.aspect = window.innerWidth / window.innerHeight;
@@ -168,6 +184,8 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], functi
             canvasElementThis.cameraOrtho.right = window.innerWidth;
             canvasElementThis.cameraOrtho.top = window.innerHeight;
             canvasElementThis.cameraOrtho.updateProjectionMatrix();
+
+            canvasElementThis.inputManager.updateOrthographicInputFieldsPositions();
 
             canvasElementThis.renderer.setSize( window.innerWidth, window.innerHeight );
 

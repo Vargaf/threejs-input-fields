@@ -454,8 +454,6 @@ define([ 'inputFields/inputField' ], function( InputFieldClass ) {
                         }));
 
                     inputElement.position.set( this.getInputPosition().x + this.getInputFieldSize() / 2, this.getInputPosition().y - realInputHeight / 2, this.getInputPosition().z );
-                    this.inputElement = inputElement;
-
                 }
 
 

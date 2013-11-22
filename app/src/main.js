@@ -64,6 +64,7 @@ require(
         mainCanvas.add( exampleObjects.getObjects() );
 
         var inputManager = new InputManagerClass();
+        mainCanvas.setInputManager( inputManager );
 
         var firstTextInput = inputManager
             .create( 'text', 'first-text', orthographicElement )
