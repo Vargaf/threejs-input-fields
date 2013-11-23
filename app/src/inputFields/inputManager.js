@@ -370,6 +370,7 @@ define(
                 // For sprite inputFields "outside" the scene
                 newFocusedElement = this.inputsLoaded[ newFocusedElement.id ];
                 newFocusedElement.setHasFocus( true );
+                this.cursorElement.setVisible( true );
                 this.focusedElement = newFocusedElement.id;
 
             } else {

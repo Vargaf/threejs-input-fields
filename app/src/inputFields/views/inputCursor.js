@@ -37,11 +37,20 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        getVisible: function() {
+            return this.visible;
+        },
+
+        setVisible: function( visible ) {
+            this.visible = visible;
+            return this;
+        },
+
         drawCursor: function( inputElement ) {
 
             if( this.visible ) {
-                var positionX = inputElement.getCursorPosition() - inputElement.inputPosition.x - 2;
-                var positionY = inputElement.getInputTextPosition().y;// - inputElement.getFontSize() * 0.05;
+                var positionX = inputElement.getCursorPosition() - inputElement.inputRealPosition.x - 2;
+                var positionY = inputElement.getInputTextPosition().y; // - inputElement.getFontSize() / 2;
                 inputElement.context.fillText( "|", positionX, positionY  );
             }
 
@@ -56,7 +65,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                 this.visible = !this.visible;
                 this.blinkingLastChange = this.blinkingClock.getElapsedTime();
 
-                inputElement.isDirty = false;
+                inputElement.isDirty = true;
                 inputElement.makeTextSprite( null );
                 inputElement.isDirty = false;
 

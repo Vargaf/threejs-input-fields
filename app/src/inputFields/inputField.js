@@ -243,6 +243,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         setHasFocus: function( value ) {
 
             this.isDirty = true;
+            this.c
             this.hasFocus = value;
             return this;
 
@@ -309,6 +310,8 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                 }
 
                 if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_TOP_RIGHT ) {
+                    // Invert the position on the Y coordinates to draw the input on a consistent way
+                    offset.y = offset.y * -1;
                     offset.y = ( offsetYDirection * offset.y ) + ( window.innerHeight - this.canvas.height / 2 );
                 }
 
@@ -321,6 +324,8 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                 }
 
                 if( this.position == this.POSITION_TOP_RIGHT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+                    // Invert the position on the X coordinates to draw the input on a consistent way
+                    offset.x = offset.x * -1;
                     offset.x = ( offsetXDirection * offset.x ) + ( window.innerWidth - this.canvas.width / 2 );
                 }
 
