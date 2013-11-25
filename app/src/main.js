@@ -14,13 +14,15 @@ require.config({
         "jquery"                : "../vendors/jquery/jquery",
         "backbone"              : "../vendors/backbone-amd/backbone",
         "underscore"            : "../vendors/underscore-amd/underscore",
-
         "threejs"               : "../vendors/threejs/build/three",
+
+        // Threejs helpers
         "detector"              : "../vendors/threejs/examples/js/Detector",
         "orbitControls"         : "../vendors/threejs/examples/js/controls/OrbitControls",
-        "mousetrap"             : "../vendors/mousetrap/mousetrap.min",
 
-        "raycaster"            : "../vendors/RayCaster/raycaster"
+        // Helpers
+        "mousetrap"             : "../helpers/mousetrap/mousetrap.min",
+        "raycaster"             : "../helpers/RayCaster/raycaster"
     },
 
     // Sets the configuration for your third party scripts that are not AMD compatible

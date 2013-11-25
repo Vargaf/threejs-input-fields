@@ -1,6 +1,6 @@
 {
     "name": "threejsInputFields",
-    "version": "0.0.0.1",
+    "version": "0.0.1",
     "ignore": [
         ".jshintrc",
         "**/*.txt"
@@ -10,7 +10,6 @@
         "backbone-amd"      : "latest",
         "underscore-amd"    : "latest",
         "requirejs"         : "latest",
-        "threejs"           : "latest",
-        "mousetrap"         : "latest"
+        "threejs"           : "latest"
     }
 }
