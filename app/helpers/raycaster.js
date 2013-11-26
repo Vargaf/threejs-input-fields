@@ -71,10 +71,6 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         onDocumentMouseMove: function( event ) {
 
-            // the following line would stop any other event handler from firing
-            // (such as the mouse's TrackballControls)
-            // event.preventDefault();
-
             // update the mouse variable
             raycasterClassTHIS.inner3DSpaceMouseX = ( event.clientX / window.innerWidth ) * 2 - 1;
             raycasterClassTHIS.inner3DSpaceMouseY = - ( event.clientY / window.innerHeight ) * 2 + 1;
@@ -83,9 +79,6 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             raycasterClassTHIS.mouseY = event.clientY;
 
             raycasterClassTHIS.isDirty = true;
-
-
-
         },
 
         onDocumentMouseClick:function( event ) {
