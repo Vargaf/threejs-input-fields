@@ -8,7 +8,7 @@
  *
  */
 
-define([ 'inputFields/inputField' ], function( InputFieldClass ) {
+define([ '../inputField' ], function( InputFieldClass ) {
 
     var inputTextClass = InputFieldClass.extend({
 

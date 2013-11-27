@@ -13,16 +13,18 @@ define(
     [
         'backbone',
         'threejs',
-        'inputFields/views/inputText',
-        'inputFields/views/inputCursor',
-        'mousetrap'
+        '../inputFields/views/inputText',
+        '../inputFields/views/inputCursor',
+        'mousetrap',
+        'jquery'
     ],
     function(
         Backbone,
         THREE,
         InputText,
         InputCursor,
-        Mousetrap
+        Mousetrap,
+        $
         ) {
 
     inputManagerClass = Backbone.Model.extend({

@@ -11,17 +11,17 @@
 require.config({
 
     paths: {
-        "jquery"                : "../vendors/jquery/jquery",
-        "backbone"              : "../vendors/backbone-amd/backbone",
-        "underscore"            : "../vendors/underscore-amd/underscore",
-        "threejs"               : "../vendors/threejs/build/three",
+        "jquery"                : "../../vendors/jquery/jquery",
+        "backbone"              : "../../vendors/backbone-amd/backbone",
+        "underscore"            : "../../vendors/underscore-amd/underscore",
+        "threejs"               : "../../vendors/threejs/build/three",
 
         // Threejs helpers
-        "detector"              : "../vendors/threejs/examples/js/Detector",
-        "orbitControls"         : "../vendors/threejs/examples/js/controls/OrbitControls",
+        "detector"              : "../../vendors/threejs/examples/js/Detector",
+        "orbitControls"         : "../../vendors/threejs/examples/js/controls/OrbitControls",
 
         // Helpers
-        "mousetrap"             : "../vendors/mousetrap/mousetrap.min"
+        "mousetrap"             : "../../vendors/mousetrap/mousetrap.min"
     },
 
     // Sets the configuration for your third party scripts that are not AMD compatible

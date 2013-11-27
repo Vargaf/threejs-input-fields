@@ -13,6 +13,7 @@
         "underscore-amd"    : "latest",
         "requirejs"         : "latest",
         "threejs"           : "latest",
-        "mousetrap"         : "latest"
+        "mousetrap"         : "latest",
+        "almond"            : "latest"
     }
 }
