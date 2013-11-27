@@ -15,6 +15,8 @@
         <script type="text/javascript" src="../vendors/underscore-amd/underscore.js"></script>
         <script type="text/javascript" src="../vendors/backbone-amd/backbone.js"></script>
         <script type="text/javascript" src="../vendors/threejs/build/three.min.js"></script>
+        <script type="text/javascript" src="../vendors/threejs/examples/js/Detector.js"></script>
+        <script type="text/javascript" src="../vendors/threejs/examples/js/controls/OrbitControls.js"></script>
         <script type="text/javascript" src="../vendors/mousetrap/mousetrap.js"></script>
         <script type="text/javascript" src="../dist/threejsInputFields.js"></script>
 	</head>
@@ -23,7 +25,136 @@
 
 
         <script type="text/javascript">
-           console.log( threejsInputFields );
+
+            var camera, scene, renderer;
+            var cameraOrtho, sceneOrtho;
+            var light;
+            var controls;
+
+            cameraOrtho = new THREE.OrthographicCamera( 0, window.innerWidth, window.innerHeight, 0, - 10, 10 );
+            sceneOrtho = new THREE.Scene();
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 20000 );
+            camera.name = 'camera';
+
+            camera.position.set( 0, 150, 400 );
+            camera.lookAt( this.scene.position );
+
+            scene.add( this.camera );
+
+            if( Detector.webgl ){
+
+                renderer = new THREE.WebGLRenderer({
+                    antialias		: true,	                // to get smoother output
+                });
+
+                renderer.setClearColor( 0x000000, 1 );
+
+                renderer.autoClear = false; // To allow render overlay on top of 3D scene
+
+            } else {
+
+                renderer = new THREE.CanvasRenderer();
+
+            }
+
+            light = new THREE.AmbientLight( 0x404040 ); // soft white light
+            light.name = "light";
+            scene.add( light );
+
+            renderer.setSize( window.innerWidth, window.innerHeight );
+
+            controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+            document.body.appendChild( renderer.domElement );
+
+            window.addEventListener( 'resize', onWindowResize, false );
+
+
+
+            //
+            //
+            //  CUSTOM
+            //
+            //
+
+            var group = new THREE.Object3D();
+
+            // FLOOR
+            var floorTexture = new THREE.ImageUtils.loadTexture( 'img/checkerboard.jpg' );
+            floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+            floorTexture.repeat.set( 10, 10 );
+            var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+            var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+            var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.position.y = -0.5;
+            floor.rotation.x = Math.PI / 2;
+            floor.name = "Checkerboard Floor";
+            floor.id = "CheckerboardFloor";
+            group.add(floor);
+
+            // SKYBOX/FOG
+            var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+            var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
+            var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+            group.add(skyBox);
+
+            // CUBE
+            var cubeGeometry = new THREE.CubeGeometry( 100, 100, 100 );
+            var cubeMaterial = new THREE.MeshNormalMaterial();
+            cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+            cube.position.set(0,50,0);
+            cube.name = "Cube";
+            cube.id = "Cube";
+            group.add(cube);
+
+            scene.add( group );
+
+
+            var inputManager = new threejsInputFields();
+            var orthographicElement = true;
+
+            var firstTextInput = inputManager
+                    .create( 'text', 'first-text', orthographicElement )
+                    .setValue( 'First text' )
+                    .setFontSize( 40 )
+                    .setBorderSize( 2 )
+                    .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_LEFT );
+            sceneOrtho.add( firstTextInput.getElement() );
+
+            var thirdTextInput = inputManager
+                    .create( 'text', 'third-text' )
+                    .setValue( 'Third text' )
+                    .setFontSize( 20 )
+                    .setBorderSize( 2 )
+                    .setInputPosition( 50, 100, 0 );
+            scene.add( thirdTextInput.getElement() );
+
+
+            function onWindowResize() {
+
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                cameraOrtho.right = window.innerWidth;
+                cameraOrtho.top = window.innerHeight;
+                cameraOrtho.updateProjectionMatrix();
+
+                renderer.setSize( window.innerWidth, window.innerHeight );
+
+            }
+
+            var render = function () {
+                requestAnimationFrame(render);
+
+                renderer.clear();
+                renderer.render(scene, camera);
+                renderer.render( sceneOrtho, cameraOrtho );
+            };
+
+            render();
+
         </script>
 
 
