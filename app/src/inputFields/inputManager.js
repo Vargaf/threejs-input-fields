@@ -27,7 +27,7 @@ define(
         $
         ) {
 
-    inputManagerClass = Backbone.Model.extend({
+    var inputManagerClass = Backbone.Model.extend({
 
         POSITION_TOP_LEFT               :   'tl',
         POSITION_TOP_RIGHT              :   'tr',

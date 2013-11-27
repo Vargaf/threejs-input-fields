@@ -7,7 +7,7 @@
  *
  */
 
-define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls' ], function( Backbone, $, THREE, Detector, OrbitControls ) {
+define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFields/inputManager' ], function( Backbone, $, THREE, Detector, OrbitControls, inputManagerClass ) {
 
     var canvasElementClass = Backbone.View.extend({
 

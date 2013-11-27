@@ -7,7 +7,6 @@
  *
  */
 
-
 require.config({
 
     paths: {
@@ -15,7 +14,8 @@ require.config({
         "backbone"              : "../../vendors/backbone-amd/backbone",
         "underscore"            : "../../vendors/underscore-amd/underscore",
         "threejs"               : "../../vendors/threejs/build/three",
-        "mousetrap"             : "../../vendors/mousetrap/mousetrap.min"
+        "mousetrap"             : "../../vendors/mousetrap/mousetrap.min",
+        "inputManager"          : "app/src/inputFields/inputManager"
     },
 
     // Sets the configuration for your third party scripts that are not AMD compatible
@@ -26,9 +26,9 @@ require.config({
     } // end Shim Configuration
 });
 
-require( [ 'app/src/inputFields/inputManager' ], function( InputManagerClass )
-    {
-        return new InputManagerClass();
+define(function (require) {
 
-    }
-);
+    var threejsInputFields = require( 'app/src/inputFields/inputManager' );
+
+    return threejsInputFields;
+});

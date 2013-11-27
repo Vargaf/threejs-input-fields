@@ -19,7 +19,6 @@
         "threejs",
         "mousetrap"
     ],
-    insertRequire: ['threejsInputFields'],
     out: "../../dist/threejsInputFields.js",
     name: "vendors/almond/almond.js",
 
