@@ -46,7 +46,7 @@
             if( Detector.webgl ){
 
                 renderer = new THREE.WebGLRenderer({
-                    antialias		: true,	                // to get smoother output
+                    antialias		: true	                // to get smoother output
                 });
 
                 renderer.setClearColor( 0x000000, 1 );
@@ -70,6 +70,8 @@
             document.body.appendChild( renderer.domElement );
 
             window.addEventListener( 'resize', onWindowResize, false );
+            document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+            document.addEventListener( 'click', onDocumentMouseClick, false );
 
 
 
@@ -112,7 +114,7 @@
             scene.add( group );
 
 
-            var inputManager = new threejsInputFields();
+            var inputManager = new threejsInputFields( { 'camera': camera } );
             var orthographicElement = true;
 
             var firstTextInput = inputManager
@@ -145,9 +147,19 @@
 
             }
 
+            function onDocumentMouseMove( event ) {
+                inputManager.onDocumentMouseMove( event );
+            }
+
+            function onDocumentMouseClick( event ) {
+                inputManager.onDocumentMouseClick( event );
+            }
+
             var render = function () {
                 requestAnimationFrame(render);
 
+                inputManager.requestAnimationFrame();
+                controls.update();
                 renderer.clear();
                 renderer.render(scene, camera);
                 renderer.render( sceneOrtho, cameraOrtho );

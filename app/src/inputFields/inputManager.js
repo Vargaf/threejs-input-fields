@@ -16,7 +16,8 @@ define(
         '../inputFields/views/inputText',
         '../inputFields/views/inputCursor',
         'mousetrap',
-        'jquery'
+        'jquery',
+        '../inputFields/raycaster'
     ],
     function(
         Backbone,
@@ -24,7 +25,8 @@ define(
         InputText,
         InputCursor,
         Mousetrap,
-        $
+        $,
+        RayCaster
         ) {
 
     var inputManagerClass = Backbone.Model.extend({
@@ -46,10 +48,16 @@ define(
         ignoreKey                   :   false,
         cursorElement               :   false,
         lastCameraPosition          :   { x: 0, y: 0, z: 0 },
+        raycaster                   :   false,
+        camera                      :   '',
 
         initialize: function() {
 
             inputManagerClassTHIS = this;
+
+            this.setCamera( this.attributes.camera );
+
+            this.raycaster = new RayCaster( { camera: this.getCamera(), inputManager: this } );
 
             $( document ).keypress(function( event ) {
 
@@ -397,6 +405,37 @@ define(
                 inputFields[ index ].onWindowResizeUpdatePosition();
 
             }
+
+        },
+
+        onDocumentMouseMove: function( event ) {
+
+            this.raycaster.onDocumentMouseMove( event );
+            return this;
+
+        },
+
+        onDocumentMouseClick: function( event ) {
+
+            this.raycaster.onDocumentMouseClick( event );
+            return this;
+
+        },
+
+        setCamera: function( camera ) {
+
+            if( typeof camera === 'undefined' ) {
+                console.error( 'The camera is needed' );
+            } else {
+                this.camera = camera;
+            }
+
+            return this;
+        },
+
+        getCamera: function() {
+
+            return this.camera;
 
         }
 

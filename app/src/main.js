@@ -45,16 +45,14 @@ require(
         '../helpers/exampleObjects',
         '../helpers/animationController',
         'inputFields/inputManager',
-        'jquery',
-        '../helpers/raycaster'
+        'jquery'
     ],
     function(
         CanvasElementClass,
         ExampleObjectsClass,
         AnimationControllerClass,
         InputManagerClass,
-        $,
-        RayCaster )
+        $ )
     {
         var orthographicElement = true;
         var animationController = new AnimationControllerClass();
@@ -64,7 +62,7 @@ require(
         var exampleObjects = new ExampleObjectsClass();
         mainCanvas.add( exampleObjects.getObjects() );
 
-        var inputManager = new InputManagerClass();
+        var inputManager = new InputManagerClass( { camera: mainCanvas.getCamera() } );
         mainCanvas.setInputManager( inputManager );
 
         var firstTextInput = inputManager
@@ -116,11 +114,22 @@ require(
             .setInputPosition( 0, 0, 0, inputManager.POSITION_CENTER );
         mainCanvas.add( sixthTextInput.getElement(), sixthTextInput.getOrthographicView() );
 
-        var raycaster = new RayCaster( { camera: mainCanvas.getCamera(), inputManager: inputManager } );
+        //var raycaster = new RayCaster( { camera: mainCanvas.getCamera(), inputManager: inputManager } );
+
+        document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+        document.addEventListener( 'click', onDocumentMouseClick, false );
+
+        function onDocumentMouseMove( event ) {
+            inputManager.onDocumentMouseMove( event );
+        }
+
+        function onDocumentMouseClick( event ) {
+            inputManager.onDocumentMouseClick( event );
+        }
 
         animationController.add( mainCanvas );
         animationController.add( inputManager );
-        animationController.add( raycaster );
+        //animationController.add( raycaster );
 
         animationController.animate();
     });

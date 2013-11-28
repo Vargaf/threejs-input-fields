@@ -30,15 +30,15 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             this.projector = new THREE.Projector();
             this.raycaster = new THREE.Raycaster();
 
-            document.addEventListener( 'mousemove', raycasterClassTHIS.onDocumentMouseMove, false );
-            document.addEventListener( 'click', raycasterClassTHIS.onDocumentMouseClick, false );
+            //document.addEventListener( 'mousemove', raycasterClassTHIS.onDocumentMouseMove, false );
+            //document.addEventListener( 'click', raycasterClassTHIS.onDocumentMouseClick, false );
 
         },
 
         setCamera: function( camera ) {
 
             if( typeof camera === 'undefined' ) {
-                console.log( 'The camera is needed' );
+                console.error( 'The camera is needed' );
             } else {
                 this.camera = camera;
             }
@@ -83,6 +83,8 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         onDocumentMouseClick:function( event ) {
 
+            raycasterClassTHIS.checkIfElementHasBeenClicked();
+
             if( false != raycasterClassTHIS.intersectedElement ) {
 
                 raycasterClassTHIS.getInputManager().setFocusedElement( raycasterClassTHIS.intersectedElement );
@@ -92,6 +94,12 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         },
 
         requestAnimationFrame: function() {
+
+            this.checkIfElementHasBeenClicked();
+
+        },
+
+        checkIfElementHasBeenClicked: function() {
 
             if( this.isDirty ) {
 
