@@ -19,16 +19,21 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
         controls                    :   '',
         className                   :   'canvas-element',
         inputManager                :   false,
+        canvasWidth                 :   0,
+        canvasHeight                :   0,
 
-        initialize: function(){
+        initialize: function( arguments ){
 
             canvasElementThis = this;
 
-            this.cameraOrtho = new THREE.OrthographicCamera( 0, window.innerWidth, window.innerHeight, 0, - 10, 10 );
+            this.setCanvasWidth( arguments.canvasWidth );
+            this.setCanvasHeight( arguments.canvasHeight );
+
+            this.cameraOrtho = new THREE.OrthographicCamera( 0, this.getCanvasWidth(), this.getCanvasHeight(), 0, - 10, 10 );
             this.sceneOrtho = new THREE.Scene();
 
             this.scene = new THREE.Scene();
-            this.camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 20000 );
+            this.camera = new THREE.PerspectiveCamera( 45, this.getCanvasWidth() / this.getCanvasHeight(), 0.1, 20000 );
             this.camera.name = 'camera';
 
             this.camera.position.set( 0, 150, 400 );
@@ -45,7 +50,7 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
 
                 this.renderer.setClearColor( 0x000000, 1 );
 
-                this.renderer.autoClear = false; // To allow render overlay on top of sprited sphere
+                this.renderer.autoClear = false; // To allow render overlay on top of 3D space
 
                 // uncomment if webgl is required
                 //}else{
@@ -61,7 +66,7 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
             light.name = "light";
             this.scene.add( light );
 
-            this.renderer.setSize( window.innerWidth, window.innerHeight );
+            this.renderer.setSize( this.getCanvasWidth(), this.getCanvasHeight() );
 
             this.controls = new THREE.OrbitControls( this.camera, this.renderer.domElement );
 
@@ -69,16 +74,15 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
 
             window.addEventListener( 'resize', this.onWindowResize, false );
 
+
         },
 
         render: function(){
 
             var canvasElement = this.renderer.domElement;
-
+            var canvasContainer = document.getElementById( 'canvas-content' );
             $( canvasElement).addClass( this.className );
-
-            //this.$el.html( canvasElement );
-            $( "body" ).append( canvasElement );
+            canvasContainer.appendChild( canvasElement );
         },
 
         /**
@@ -122,14 +126,6 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
 
         },
 
-        animate: function( objectItself ) {
-
-            window.requestAnimationFrame( this.animate, objectItself );
-            objectItself.render();
-            objectItself.update();
-
-        },
-
         update: function() {
 
             this.controls.update();
@@ -161,6 +157,41 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
             return this.sceneOrtho;
         },
 
+
+        setCanvasWidth: function( canvasWidth ) {
+
+            if( typeof canvasWidth === 'undefined' ) {
+                console.error( 'The canvasWidth is needed' );
+            } else {
+                this.canvasWidth = canvasWidth;
+            }
+
+            return this;
+        },
+
+        getCanvasWidth: function() {
+
+            return this.canvasWidth;
+
+        },
+
+        setCanvasHeight: function( canvasHeight ) {
+
+            if( typeof canvasHeight === 'undefined' ) {
+                console.error( 'The canvasHeight is needed' );
+            } else {
+                this.canvasHeight = canvasHeight;
+            }
+
+            return this;
+        },
+
+        getCanvasHeight: function() {
+
+            return this.canvasHeight;
+
+        },
+
         setInputManager: function( inputManager ) {
 
             if( inputManager instanceof inputManagerClass == false) {
@@ -178,16 +209,16 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
 
         onWindowResize: function() {
 
-            canvasElementThis.camera.aspect = window.innerWidth / window.innerHeight;
+            canvasElementThis.camera.aspect = canvasElementThis.getCanvasWidth() / canvasElementThis.getCanvasHeight();
             canvasElementThis.camera.updateProjectionMatrix();
 
-            canvasElementThis.cameraOrtho.right = window.innerWidth;
-            canvasElementThis.cameraOrtho.top = window.innerHeight;
+            canvasElementThis.cameraOrtho.right = canvasElementThis.getCanvasWidth();
+            canvasElementThis.cameraOrtho.top = canvasElementThis.getCanvasHeight();
             canvasElementThis.cameraOrtho.updateProjectionMatrix();
 
             canvasElementThis.inputManager.updateOrthographicInputFieldsPositions();
 
-            canvasElementThis.renderer.setSize( window.innerWidth, window.innerHeight );
+            canvasElementThis.renderer.setSize( canvasElementThis.getCanvasWidth(), canvasElementThis.getCanvasHeight() );
 
         }
     });

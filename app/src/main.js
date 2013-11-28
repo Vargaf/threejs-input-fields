@@ -15,13 +15,11 @@ require.config({
         "backbone"              : "../../vendors/backbone-amd/backbone",
         "underscore"            : "../../vendors/underscore-amd/underscore",
         "threejs"               : "../../vendors/threejs/build/three",
+        "mousetrap"             : "../../vendors/mousetrap/mousetrap.min",
 
         // Threejs helpers
         "detector"              : "../../vendors/threejs/examples/js/Detector",
-        "orbitControls"         : "../../vendors/threejs/examples/js/controls/OrbitControls",
-
-        // Helpers
-        "mousetrap"             : "../../vendors/mousetrap/mousetrap.min"
+        "orbitControls"         : "../../vendors/threejs/examples/js/controls/OrbitControls"
     },
 
     // Sets the configuration for your third party scripts that are not AMD compatible
@@ -54,15 +52,19 @@ require(
         InputManagerClass,
         $ )
     {
+        var canvasContent = document.getElementById( 'canvas-content' );
+        var canvasWidth = canvasContent.clientWidth;
+        var canvasHeight = canvasContent.clientHeight;
+
         var orthographicElement = true;
         var animationController = new AnimationControllerClass();
 
-        mainCanvas = new CanvasElementClass( { el: $( "body" ) } );
+        var mainCanvas = new CanvasElementClass( { el: canvasContent, 'canvasWidth': canvasWidth, 'canvasHeight': canvasHeight } );
 
         var exampleObjects = new ExampleObjectsClass();
         mainCanvas.add( exampleObjects.getObjects() );
 
-        var inputManager = new InputManagerClass( { camera: mainCanvas.getCamera() } );
+        var inputManager = new InputManagerClass( { camera: mainCanvas.getCamera(), 'canvasWidth': canvasWidth, 'canvasHeight': canvasHeight } );
         mainCanvas.setInputManager( inputManager );
 
         var firstTextInput = inputManager
@@ -114,8 +116,6 @@ require(
             .setInputPosition( 0, 0, 0, inputManager.POSITION_CENTER );
         mainCanvas.add( sixthTextInput.getElement(), sixthTextInput.getOrthographicView() );
 
-        //var raycaster = new RayCaster( { camera: mainCanvas.getCamera(), inputManager: inputManager } );
-
         document.addEventListener( 'mousemove', onDocumentMouseMove, false );
         document.addEventListener( 'click', onDocumentMouseClick, false );
 
@@ -129,7 +129,5 @@ require(
 
         animationController.add( mainCanvas );
         animationController.add( inputManager );
-        //animationController.add( raycaster );
-
         animationController.animate();
     });

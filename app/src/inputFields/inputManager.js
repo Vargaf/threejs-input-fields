@@ -50,12 +50,16 @@ define(
         lastCameraPosition          :   { x: 0, y: 0, z: 0 },
         raycaster                   :   false,
         camera                      :   '',
+        canvasWidth                 :   0,
+        canvasHeight                :   0,
 
         initialize: function() {
 
             inputManagerClassTHIS = this;
 
             this.setCamera( this.attributes.camera );
+            this.setCanvasWidth( this.attributes.canvasWidth );
+            this.setCanvasHeight( this.attributes.canvasHeight );
 
             this.raycaster = new RayCaster( { camera: this.getCamera(), inputManager: this } );
 
@@ -436,6 +440,40 @@ define(
         getCamera: function() {
 
             return this.camera;
+
+        },
+
+        setCanvasWidth: function( canvasWidth ) {
+
+            if( typeof canvasWidth === 'undefined' ) {
+                console.error( 'The canvasWidth is needed' );
+            } else {
+                this.canvasWidth = canvasWidth;
+            }
+
+            return this;
+        },
+
+        getCanvasWidth: function() {
+
+            return this.canvasWidth;
+
+        },
+
+        setCanvasHeight: function( canvasHeight ) {
+
+            if( typeof canvasHeight === 'undefined' ) {
+                console.error( 'The canvasHeight is needed' );
+            } else {
+                this.canvasHeight = canvasHeight;
+            }
+
+            return this;
+        },
+
+        getCanvasHeight: function() {
+
+            return this.canvasHeight;
 
         }
 

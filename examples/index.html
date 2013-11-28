@@ -21,7 +21,9 @@
         <script type="text/javascript" src="../dist/threejsInputFields.js"></script>
 	</head>
 
-	<body>
+	<body style="margin: 0 auto;">
+
+        <div style="width: 600px; height: 450px;" id="canvas-content"></div>
 
 
         <script type="text/javascript">
@@ -31,22 +33,27 @@
             var light;
             var controls;
 
-            cameraOrtho = new THREE.OrthographicCamera( 0, window.innerWidth, window.innerHeight, 0, - 10, 10 );
+            var canvasContent = document.getElementById( 'canvas-content' );
+            var canvasWidth = canvasContent.clientWidth;
+            var canvasHeight = canvasContent.clientHeight;
+
+            cameraOrtho = new THREE.OrthographicCamera( 0, canvasWidth, canvasHeight, 0, - 10, 10 );
             sceneOrtho = new THREE.Scene();
 
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 20000 );
+            camera = new THREE.PerspectiveCamera( 45, canvasWidth / canvasHeight, 0.1, 20000 );
             camera.name = 'camera';
 
             camera.position.set( 0, 150, 400 );
-            camera.lookAt( this.scene.position );
+            camera.lookAt( scene.position );
 
-            scene.add( this.camera );
+            scene.add( camera );
 
             if( Detector.webgl ){
 
                 renderer = new THREE.WebGLRenderer({
-                    antialias		: true	                // to get smoother output
+                    antialias		: true,	                // to get smoother output
+                    preserveDrawingBuffer	: true	        // to allow screenshot
                 });
 
                 renderer.setClearColor( 0x000000, 1 );
@@ -63,11 +70,11 @@
             light.name = "light";
             scene.add( light );
 
-            renderer.setSize( window.innerWidth, window.innerHeight );
+            renderer.setSize( canvasWidth, canvasHeight );
 
             controls = new THREE.OrbitControls( camera, renderer.domElement );
 
-            document.body.appendChild( renderer.domElement );
+            canvasContent.appendChild( renderer.domElement );
 
             window.addEventListener( 'resize', onWindowResize, false );
             document.addEventListener( 'mousemove', onDocumentMouseMove, false );
@@ -113,8 +120,7 @@
 
             scene.add( group );
 
-
-            var inputManager = new threejsInputFields( { 'camera': camera } );
+            var inputManager = new threejsInputFields( { 'camera': camera, 'canvasWidth': canvasWidth, 'canvasHeight': canvasHeight } );
             var orthographicElement = true;
 
             var firstTextInput = inputManager
@@ -136,14 +142,14 @@
 
             function onWindowResize() {
 
-                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.aspect = canvasWidth / canvasHeight;
                 camera.updateProjectionMatrix();
 
-                cameraOrtho.right = window.innerWidth;
-                cameraOrtho.top = window.innerHeight;
+                cameraOrtho.right = canvasWidth;
+                cameraOrtho.top = canvasHeight;
                 cameraOrtho.updateProjectionMatrix();
 
-                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.setSize( canvasWidth, canvasHeight );
 
             }
 

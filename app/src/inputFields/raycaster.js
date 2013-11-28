@@ -30,9 +30,6 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             this.projector = new THREE.Projector();
             this.raycaster = new THREE.Raycaster();
 
-            //document.addEventListener( 'mousemove', raycasterClassTHIS.onDocumentMouseMove, false );
-            //document.addEventListener( 'click', raycasterClassTHIS.onDocumentMouseClick, false );
-
         },
 
         setCamera: function( camera ) {
@@ -69,11 +66,23 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         },
 
+        getCanvasWidth: function() {
+
+            return this.getInputManager().getCanvasWidth();
+
+        },
+
+        getCanvasHeight: function() {
+
+            return this.getInputManager().getCanvasHeight();
+
+        },
+
         onDocumentMouseMove: function( event ) {
 
             // update the mouse variable
-            raycasterClassTHIS.inner3DSpaceMouseX = ( event.clientX / window.innerWidth ) * 2 - 1;
-            raycasterClassTHIS.inner3DSpaceMouseY = - ( event.clientY / window.innerHeight ) * 2 + 1;
+            raycasterClassTHIS.inner3DSpaceMouseX = ( event.clientX / this.getCanvasWidth() ) * 2 - 1;
+            raycasterClassTHIS.inner3DSpaceMouseY = - ( event.clientY / this.getCanvasHeight() ) * 2 + 1;
 
             raycasterClassTHIS.mouseX = event.clientX;
             raycasterClassTHIS.mouseY = event.clientY;
@@ -153,8 +162,8 @@ define( [ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
                 xIni = inputFieldPosition.x - inputFieldElement.scale.x / 2;
                 xEnd = ( inputFieldPosition.x + inputFieldElement.scale.x / 2);
-                yIni = window.innerHeight - ( inputFieldPosition.y + inputFieldElement.scale.y / 2 );
-                yEnd = window.innerHeight - ( inputFieldPosition.y - inputFieldElement.scale.y / 2 );
+                yIni = this.getCanvasHeight() - ( inputFieldPosition.y + inputFieldElement.scale.y / 2 );
+                yEnd = this.getCanvasHeight() - ( inputFieldPosition.y - inputFieldElement.scale.y / 2 );
 
                 if(
                     ( xIni <= this.mouseX && this.mouseX <= xEnd ) &&
