@@ -69,7 +69,7 @@ require(
 
         var firstTextInput = inputManager
             .create( 'text', 'first-text', orthographicElement )
-            .setValue( 'First text' )
+            .setValue( 'Top Left' )
             .setFontSize( 40 )
             .setBorderSize( 2 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_LEFT );
@@ -77,15 +77,16 @@ require(
 
         var secondTextInput = inputManager
             .create( 'text', 'second-text', orthographicElement )
-            .setValue( 'Second text' )
+            .setValue( 'Bottom right' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
+            .setInputFieldSize( 100 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_RIGHT );
         mainCanvas.add( secondTextInput.getElement(), secondTextInput.getOrthographicView() );
 
         var thirdTextInput = inputManager
             .create( 'text', 'third-text' )
-            .setValue( 'Third text' )
+            .setValue( 'Inner 3D' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
             .setInputPosition( 50, 100, 0 );
@@ -94,27 +95,66 @@ require(
 
         var fourthTextInput = inputManager
             .create( 'text', 'fourth-text', orthographicElement )
-            .setValue( 'Fourth text' )
+            .setValue( 'Top right' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
+            .setInputFieldSize( 50 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_RIGHT );
         mainCanvas.add( fourthTextInput.getElement(), fourthTextInput.getOrthographicView() );
 
         var fifthTextInput = inputManager
             .create( 'text', 'fifth-text', orthographicElement )
-            .setValue( 'Fifth text' )
-            .setFontSize( 20 )
+            .setValue( 'Bottom left' )
+            .setFontSize( 15 )
             .setBorderSize( 2 )
+            .setInputFieldSize( 20 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_LEFT );
         mainCanvas.add( fifthTextInput.getElement(), fifthTextInput.getOrthographicView() );
 
         var sixthTextInput = inputManager
             .create( 'text', 'sixth-text', orthographicElement )
-            .setValue( 'Sixth text' )
+            .setValue( 'Center' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
+            .setInputFieldSize( 150 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_CENTER );
         mainCanvas.add( sixthTextInput.getElement(), sixthTextInput.getOrthographicView() );
+
+        var seventhTextInput = inputManager
+            .create( 'text', 'seventh-text', orthographicElement )
+            .setValue( 'Top center' )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputFieldSize( 125 )
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_CENTER );
+        mainCanvas.add( seventhTextInput.getElement(), seventhTextInput.getOrthographicView() );
+
+        var eighthTextInput = inputManager
+            .create( 'text', 'eightth-text', orthographicElement )
+            .setValue( 'Right center' )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputFieldSize( 100 )
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_RIGHT_CENTER );
+        mainCanvas.add( eighthTextInput.getElement(), eighthTextInput.getOrthographicView() );
+
+        var ninthTextInput = inputManager
+            .create( 'text', 'ninth-text', orthographicElement )
+            .setValue( 'Bottom center' )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_CENTER );
+        mainCanvas.add( ninthTextInput.getElement(), ninthTextInput.getOrthographicView() );
+
+        var tenthTextInput = inputManager
+            .create( 'text', 'tenth-text', orthographicElement )
+            .setValue( 'Left center' )
+            .setFontSize( 20 )
+            .setBorderSize( 2 )
+            .setInputPosition( 0, 0, 0, inputManager.POSITION_LEFT_CENTER );
+        mainCanvas.add( tenthTextInput.getElement(), tenthTextInput.getOrthographicView() );
+
+
 
         document.addEventListener( 'mousemove', onDocumentMouseMove, false );
         document.addEventListener( 'click', onDocumentMouseClick, false );

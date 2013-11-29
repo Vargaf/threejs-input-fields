@@ -35,7 +35,12 @@ define(
         POSITION_TOP_RIGHT              :   'tr',
         POSITION_BOTTOM_LEFT            :   'bl',
         POSITION_BOTTOM_RIGHT           :   'br',
+        POSITION_TOP_CENTER             :   'tc',
+        POSITION_LEFT_CENTER            :   'lc',
+        POSITION_RIGHT_CENTER           :   'rc',
+        POSITION_BOTTOM_CENTER          :   'bc',
         POSITION_CENTER                 :   'c',
+
 
         inputTypesEnabled               :   {
             'text'      :     1

@@ -23,7 +23,6 @@ define([ '../inputField' ], function( InputFieldClass ) {
 
         textIndex                       :   0,
         currentMessageWidth             :   0,
-        inputFieldSize                  :   200,
 
         cursorPosition                  :   0,
         cursorTextPosition              :   0,

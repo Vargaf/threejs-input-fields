@@ -13,12 +13,6 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
     var inputFieldClass = Backbone.View.extend({
 
 
-        POSITION_TOP_LEFT               :   'tl',
-        POSITION_TOP_RIGHT              :   'tr',
-        POSITION_BOTTOM_LEFT            :   'bl',
-        POSITION_BOTTOM_RIGHT           :   'br',
-        POSITION_CENTER                 :   'c',
-
         value                           :   '',
         inputType                       :   '',
         isDirty                         :   true,
@@ -31,6 +25,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         hasFocus                        :   false,
         position                        :   'tl',
         orthographicView                :   false,
+        inputFieldSize                  :   200,
 
         initialize: function( arguments ) {
 
@@ -90,6 +85,18 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         inputCursorEnd: function() {
 
             console.error ( "-- inputField -- There is an object that doesn't rewrites the 'inputCursorEnd' function" );
+
+        },
+
+        setInputFieldSize: function( size ) {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'setInputFieldSize' function" );
+
+        },
+
+        getInputFieldSize: function() {
+
+            console.error ( "-- inputField -- There is an object that doesn't rewrites the 'getInputFieldSize' function" );
 
         },
 
@@ -259,11 +266,17 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
             if( this.orthographicView ) {
 
-                var positionExists = position == this.POSITION_TOP_LEFT;
-                positionExists = positionExists || position == this.POSITION_TOP_RIGHT;
-                positionExists = positionExists || position == this.POSITION_BOTTOM_LEFT;
-                positionExists = positionExists || position == this.POSITION_BOTTOM_RIGHT;
-                positionExists = positionExists || position == this.POSITION_CENTER;
+                var inputManager = this.getInputManager();
+
+                var positionExists = position == inputManager.POSITION_TOP_LEFT;
+                positionExists = positionExists || position == inputManager.POSITION_TOP_RIGHT;
+                positionExists = positionExists || position == inputManager.POSITION_BOTTOM_LEFT;
+                positionExists = positionExists || position == inputManager.POSITION_BOTTOM_RIGHT;
+                positionExists = positionExists || position == inputManager.POSITION_CENTER;
+                positionExists = positionExists || position == inputManager.POSITION_TOP_CENTER;
+                positionExists = positionExists || position == inputManager.POSITION_RIGHT_CENTER;
+                positionExists = positionExists || position == inputManager.POSITION_BOTTOM_CENTER;
+                positionExists = positionExists || position == inputManager.POSITION_LEFT_CENTER;
 
 
                 if( !positionExists ) {
@@ -311,40 +324,65 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
             if( this.orthographicView ) {
 
+                var inputManager = this.getInputManager();
+
                 var offsetXDirection = 1;
                 var offsetYDirection = 1;
 
-                if( this.position == this.POSITION_BOTTOM_RIGHT || this.position == this.POSITION_TOP_RIGHT ) {
+                if( this.position == inputManager.POSITION_BOTTOM_RIGHT ||
+                    this.position == inputManager.POSITION_TOP_RIGHT ||
+                    this.position == inputManager.POSITION_RIGHT_CENTER ) {
                     offsetXDirection = -1;
                 }
-                if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+                if( this.position == inputManager.POSITION_BOTTOM_LEFT ||
+                    this.position == inputManager.POSITION_BOTTOM_RIGHT ||
+                    this.position == inputManager.POSITION_BOTTOM_CENTER ) {
                     offsetYDirection = -1;
                 }
 
-                if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_TOP_RIGHT ) {
+                if( this.position == inputManager.POSITION_TOP_LEFT ||
+                    this.position == inputManager.POSITION_TOP_RIGHT ||
+                    this.position == inputManager.POSITION_TOP_CENTER ) {
                     // Invert the position on the Y coordinates to draw the input on a consistent way
                     offset.y = offset.y * -1;
                     offset.y = ( offsetYDirection * offset.y ) + ( this.getCanvasHeight() - this.canvas.height / 2 );
                 }
 
-                if( this.position == this.POSITION_BOTTOM_LEFT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+                if( this.position == inputManager.POSITION_BOTTOM_LEFT ||
+                    this.position == inputManager.POSITION_BOTTOM_RIGHT ||
+                    this.position == inputManager.POSITION_BOTTOM_CENTER ) {
                     offset.y = ( offsetYDirection * offset.y ) + this.canvas.height / 2;
                 }
 
-                if( this.position == this.POSITION_TOP_LEFT || this.position == this.POSITION_BOTTOM_LEFT ) {
+                if( this.position == inputManager.POSITION_TOP_LEFT ||
+                    this.position == inputManager.POSITION_BOTTOM_LEFT ||
+                    this.position == inputManager.POSITION_LEFT_CENTER ) {
                     offset.x = ( offsetXDirection * offset.x ) + this.canvas.width / 2;
                 }
 
-                if( this.position == this.POSITION_TOP_RIGHT || this.position == this.POSITION_BOTTOM_RIGHT ) {
+                if( this.position == inputManager.POSITION_TOP_RIGHT ||
+                    this.position == inputManager.POSITION_BOTTOM_RIGHT ||
+                    this.position == inputManager.POSITION_RIGHT_CENTER ) {
                     // Invert the position on the X coordinates to draw the input on a consistent way
                     offset.x = offset.x * -1;
                     offset.x = ( offsetXDirection * offset.x ) + ( this.getCanvasWidth() - this.canvas.width / 2 );
                 }
 
-                if( this.position == this.POSITION_CENTER ) {
+                if( this.position == inputManager.POSITION_CENTER ) {
                     offset.x +=  this.getCanvasWidth() * 0.5;
                     offset.y +=  this.getCanvasHeight() * 0.5;
                 }
+
+                if( this.position == inputManager.POSITION_TOP_CENTER ||
+                    this.position == inputManager.POSITION_BOTTOM_CENTER ) {
+                    offset.x +=  this.getCanvasWidth() * 0.5;
+                }
+                if( this.position == inputManager.POSITION_RIGHT_CENTER ||
+                    this.position == inputManager.POSITION_LEFT_CENTER ) {
+                    offset.y +=  this.getCanvasHeight() * 0.5;
+                }
+
+
 
             }
 
