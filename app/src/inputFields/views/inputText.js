@@ -518,13 +518,17 @@ define([ '../inputField' ], function( InputFieldClass ) {
             var textWidth = this.context.measureText( tmpMessage ).width + this.getBorderOffset() * 3;
             var textMovedWith = textWidth + this.inputTextPosition.x;
 
-            if( textMovedWith >= this.getInputFieldSize() ) {
+            if( textMovedWith >= this.getInputFieldSize() ) { // Displace the text to the left
 
                 this.setInputTextPositionX( this.getInputFieldSize() - textWidth );
 
-            } else if(textMovedWith < ( this.getBorderOffset() ) ) {
+            } else if( textMovedWith < ( this.getBorderOffset() * 2 ) ) { // Displace the text to the right
 
                 this.setInputTextPositionX( this.inputTextPosition.x + Math.abs( textMovedWith ) + this.getBorderOffset() * 3 );
+
+            } else if( textMovedWith > ( this.getBorderOffset() * 2 ) ) { // Set the max right displacement position of text to the start of the input field
+
+                this.setInputTextPositionX( 0 );
 
             }
 

@@ -107,7 +107,7 @@ require(
             .setValue( 'Bottom left' )
             .setFontSize( 15 )
             .setBorderSize( 2 )
-            .setInputFieldSize( 20 )
+            .setInputFieldSize( 250 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_LEFT );
         mainCanvas.add( fifthTextInput.getElement(), fifthTextInput.getOrthographicView() );
 
@@ -143,6 +143,7 @@ require(
             .setValue( 'Bottom center' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
+            .setInputFieldSize( 100 )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_BOTTOM_CENTER );
         mainCanvas.add( ninthTextInput.getElement(), ninthTextInput.getOrthographicView() );
 
