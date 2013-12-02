@@ -21,6 +21,9 @@ define([ '../inputField' ], function( InputFieldClass ) {
         backgroundColor                 :   { r:255, g:255, b:255, a:1.0 },
         borderRadius                    :   6,
 
+        borderColorReadOnly             :   { r:153, g:153, b:153, a:1.0 },
+        fontColorReadOnly               :   { r:102, g:102, b:102, a:1.0 },
+
         textIndex                       :   0,
         currentMessageWidth             :   0,
 
@@ -38,6 +41,7 @@ define([ '../inputField' ], function( InputFieldClass ) {
 
         inputCanvasId                   :   '',
         inside3DSpaceCollisionDetector  :   '',
+        readOnly                        :   false,
 
         initialize: function() {
 
@@ -265,6 +269,19 @@ define([ '../inputField' ], function( InputFieldClass ) {
 
         },
 
+        setReadOnly: function( readOnly ) {
+
+            this.readOnly = readOnly;
+            return this;
+
+        },
+
+        getReadOnly: function() {
+
+            return this.readOnly;
+
+        },
+
         /**
          *
          * Abstract methods
@@ -288,18 +305,21 @@ define([ '../inputField' ], function( InputFieldClass ) {
 
         addKeyDownValue: function( value ) {
 
-            this.isDirty = true;
+            if( !this.getReadOnly() ) {
 
-            if( this.getCursorTextPosition() != this.getInputValue().length ) {
-                this.value =
-                    this.value.substring( 0, this.getCursorTextPosition() ) +
-                    value +
-                    this.value.substring( this.getCursorTextPosition(), this.getInputValue().length );
-            } else {
-                this.value += value;
+                this.isDirty = true;
+
+                if( this.getCursorTextPosition() != this.getInputValue().length ) {
+                    this.value =
+                        this.value.substring( 0, this.getCursorTextPosition() ) +
+                            value +
+                            this.value.substring( this.getCursorTextPosition(), this.getInputValue().length );
+                } else {
+                    this.value += value;
+                }
+
+                this.incCursorTextPosition();
             }
-
-            this.incCursorTextPosition();
 
             return this;
 
@@ -317,26 +337,30 @@ define([ '../inputField' ], function( InputFieldClass ) {
 
         inputBackspace: function() {
 
-            var value = this.getInputValue();
-            var message = value.substring( 0, this.getCursorTextPosition() - 1 );
-            message += value.substring( this.getCursorTextPosition(), this.getCursorTextPosition().length );
-            this.value = message;
-            this.cursorTextPosition--;
-            this.isDirty = true;
-            this.makeTextSprite();
-            this.isDirty = false;
+            if( !this.getReadOnly() ) {
+                var value = this.getInputValue();
+                var message = value.substring( 0, this.getCursorTextPosition() - 1 );
+                message += value.substring( this.getCursorTextPosition(), this.getCursorTextPosition().length );
+                this.value = message;
+                this.cursorTextPosition--;
+                this.isDirty = true;
+                this.makeTextSprite();
+                this.isDirty = false;
+            }
 
         },
 
         inputDel: function() {
 
-            var value = this.getInputValue();
-            var message = value.substring( 0, this.getCursorTextPosition() );
-            message += value.substring( this.getCursorTextPosition() + 1, this.getCursorTextPosition().length );
-            this.value = message;
-            this.isDirty = true;
-            this.makeTextSprite();
-            this.isDirty = false;
+            if( !this.getReadOnly() ) {
+                var value = this.getInputValue();
+                var message = value.substring( 0, this.getCursorTextPosition() );
+                message += value.substring( this.getCursorTextPosition() + 1, this.getCursorTextPosition().length );
+                this.value = message;
+                this.isDirty = true;
+                this.makeTextSprite();
+                this.isDirty = false;
+            }
 
         },
 
@@ -481,8 +505,15 @@ define([ '../inputField' ], function( InputFieldClass ) {
             ctx.fillStyle   = "rgba(" + this.backgroundColor.r + "," + this.backgroundColor.g + ","
                 + this.backgroundColor.b + "," + this.backgroundColor.a + ")";
             // border color
-            ctx.strokeStyle = "rgba(" + this.borderColor.r + "," + this.borderColor.g + ","
-                + this.borderColor.b + "," + this.borderColor.a + ")";
+
+            if( !this.getReadOnly() ) {
+                ctx.strokeStyle = "rgba(" + this.borderColor.r + "," + this.borderColor.g + ","
+                    + this.borderColor.b + "," + this.borderColor.a + ")";
+            } else {
+                ctx.strokeStyle = "rgba(" + this.borderColorReadOnly.r + "," + this.borderColorReadOnly.g + ","
+                    + this.borderColorReadOnly.b + "," + this.borderColorReadOnly.a + ")";
+            }
+
             ctx.lineWidth = this.getBorderSize();
 
             ctx.beginPath();
@@ -501,7 +532,11 @@ define([ '../inputField' ], function( InputFieldClass ) {
         },
 
         setInputTextValue: function( context, message ) {
-            context.fillStyle = "rgba(" + this.fontColor.r + ", " + this.fontColor.g + ", " + this.fontColor.b + ", " + this.fontColor.a + ")";
+            if( !this.getReadOnly() ) {
+                context.fillStyle = "rgba(" + this.fontColor.r + ", " + this.fontColor.g + ", " + this.fontColor.b + ", " + this.fontColor.a + ")";
+            } else {
+                context.fillStyle = "rgba(" + this.fontColorReadOnly.r + ", " + this.fontColorReadOnly.g + ", " + this.fontColorReadOnly.b + ", " + this.fontColorReadOnly.a + ")";
+            }
             context.fillText( message, this.getInputTextPosition().x, this.getInputTextPosition().y );
 
             if( this.getHasFocus() ) {

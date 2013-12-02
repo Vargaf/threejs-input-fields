@@ -155,6 +155,15 @@ require(
             .setInputPosition( 0, 0, 0, inputManager.POSITION_LEFT_CENTER );
         mainCanvas.add( tenthTextInput.getElement(), tenthTextInput.getOrthographicView() );
 
+        var outputField = inputManager
+            .create( 'text', 'output-field', orthographicElement )
+            .setValue( 'Output field' )
+            .setFontSize( 10 )
+            .setBorderSize( 2 )
+            .setReadOnly( true )
+            .setInputPosition( 0, 100, 0, inputManager.POSITION_TOP_CENTER );
+        mainCanvas.add( outputField.getElement(), outputField.getOrthographicView() );
+
 
 
         document.addEventListener( 'mousemove', onDocumentMouseMove, false );
