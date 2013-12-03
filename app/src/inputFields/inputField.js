@@ -27,6 +27,9 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         orthographicView                :   false,
         inputFieldSize                  :   200,
 
+        onBlurParameters                :   { owner: '', callback: '', parameters: '' },
+        onFocusParameters               :   { owner: '', callback: '', parameters: '' },
+
         initialize: function( arguments ) {
 
             this.setInputManager( arguments.inputManager );
@@ -250,7 +253,13 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
         setHasFocus: function( value ) {
 
             this.isDirty = true;
-            this.c
+
+            if( this.hasFocus == true && value == false ) {
+                this.triggerEvent( 'blur' );
+            } else if( this.hasFocus == false && value == true ) {
+                this.triggerEvent( 'focus' );
+            }
+
             this.hasFocus = value;
             return this;
 
@@ -396,6 +405,56 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             var element = this.getElement();
 
             element.position.set( position.x, position.y, position.z );
+
+        },
+
+        onBlur: function( callback, parameters ) {
+
+            if( typeof callback !== 'function' || typeof parameters === 'undefined' ) {
+                console.error( 'The onBlur parameters must be declared' );
+            } else {
+
+                var parameters = { owner: this, callback: callback, parameters: parameters };
+
+                this.onBlurParameters = parameters;
+            }
+
+            return this;
+        },
+
+        onFocus: function( callback, parameters ) {
+
+            if( typeof callback !== 'function' || typeof parameters === 'undefined' ) {
+                console.error( 'The onFocus parameters must be declared' );
+            } else {
+                this.onFocusParameters.owner = this;
+                this.onFocusParameters.callback = callback;
+                this.onFocusParameters.parameters = parameters;
+            }
+
+            return this;
+
+        },
+
+        triggerEvent: function( event ) {
+
+            switch( event.toLowerCase() )
+            {
+                case 'blur':
+                    if( typeof this.onBlurParameters.callback == 'function')
+                        this.onBlurParameters.callback( { object: this.onBlurParameters.owner, parameters: this.onBlurParameters.parameters } );
+                    break;
+
+                case 'focus':
+                    if( typeof this.onFocusParameters.callback == 'function')
+                        this.onFocusParameters.callback( { object: this.onFocusParameters.owner, parameters: this.onFocusParameters.parameters } );
+                    break;
+
+                default:
+
+                    console.error( 'The event:"' + event + '" does not exists.' );
+                    break;
+            }
 
         }
 

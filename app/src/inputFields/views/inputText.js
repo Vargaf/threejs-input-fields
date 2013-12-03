@@ -257,6 +257,7 @@ define([ '../inputField' ], function( InputFieldClass ) {
 
         setValue: function( value ) {
 
+            this.isDirty = true;
             this.value = value;
             this.cursorTextPosition = value.length;
 

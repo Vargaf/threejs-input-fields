@@ -72,6 +72,7 @@ require(
             .setValue( 'Top Left' )
             .setFontSize( 40 )
             .setBorderSize( 2 )
+            .onBlur( setValueToOutput, '' )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_LEFT );
         mainCanvas.add( firstTextInput.getElement(), firstTextInput.getOrthographicView() );
 
@@ -164,6 +165,13 @@ require(
             .setInputPosition( 0, 100, 0, inputManager.POSITION_TOP_CENTER );
         mainCanvas.add( outputField.getElement(), outputField.getOrthographicView() );
 
+
+        // To set the input value to the "output-field" when an input lost its focus
+        function setValueToOutput( event ) {
+
+            outputField.setValue( event.object.getInputValue() );
+
+        }
 
 
         document.addEventListener( 'mousemove', onDocumentMouseMove, false );
