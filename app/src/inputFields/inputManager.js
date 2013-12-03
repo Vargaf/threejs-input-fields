@@ -311,6 +311,8 @@ define(
 
             }
 
+            this.updateDirtyInputFields();
+
         },
 
         getInputCursor: function() {
@@ -479,6 +481,20 @@ define(
         getCanvasHeight: function() {
 
             return this.canvasHeight;
+
+        },
+
+        updateDirtyInputFields: function() {
+
+            for( var index in this.inputsLoaded ) {
+
+                var inputElement = this.inputsLoaded[ index ];
+
+                if( inputElement.getIsDirty() ) {
+                    inputElement.drawInputElement();
+                }
+
+            }
 
         }
 

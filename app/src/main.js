@@ -64,7 +64,7 @@ require(
         var exampleObjects = new ExampleObjectsClass();
         mainCanvas.add( exampleObjects.getObjects() );
 
-        var inputManager = new InputManagerClass( { camera: mainCanvas.getCamera(), 'canvasWidth': canvasWidth, 'canvasHeight': canvasHeight } );
+        inputManager = new InputManagerClass( { camera: mainCanvas.getCamera(), 'canvasWidth': canvasWidth, 'canvasHeight': canvasHeight } );
         mainCanvas.setInputManager( inputManager );
 
         var firstTextInput = inputManager
@@ -153,6 +153,7 @@ require(
             .setValue( 'Left center' )
             .setFontSize( 20 )
             .setBorderSize( 2 )
+            .onFocus( concatenateValueToOutput, '' )
             .setInputPosition( 0, 0, 0, inputManager.POSITION_LEFT_CENTER );
         mainCanvas.add( tenthTextInput.getElement(), tenthTextInput.getOrthographicView() );
 
@@ -170,6 +171,12 @@ require(
         function setValueToOutput( event ) {
 
             outputField.setValue( event.object.getInputValue() );
+
+        }
+
+        function concatenateValueToOutput( event ) {
+
+            outputField.setValue( outputField.getInputValue() + ' -- ' + event.object.getInputValue() );
 
         }
 

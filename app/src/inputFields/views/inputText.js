@@ -260,6 +260,7 @@ define([ '../inputField' ], function( InputFieldClass ) {
             this.isDirty = true;
             this.value = value;
             this.cursorTextPosition = value.length;
+            this.initializeInputTextCursorPosition();
 
             return this;
         },
@@ -438,7 +439,10 @@ define([ '../inputField' ], function( InputFieldClass ) {
 
             if( this.isDirty ) {
                 this.displaceInputValue();
-                this.getInputCursor().setCursorTextPosition( this.getCursorTextPosition() );
+
+                if( this.getHasFocus() ) {
+                    this.getInputCursor().setCursorTextPosition( this.getCursorTextPosition() );
+                }
             }
 
             this.roundRect( context, borderThickness / 2, borderThickness / 2, this.getInputFieldSize() - borderThickness, realInputHeight - borderThickness, this.getBorderRadius() );

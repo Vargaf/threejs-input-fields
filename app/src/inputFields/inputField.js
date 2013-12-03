@@ -252,6 +252,7 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         setHasFocus: function( value ) {
 
+            var isDirty = this.isDirty;
             this.isDirty = true;
 
             if( this.hasFocus == true && value == false ) {
@@ -259,6 +260,8 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             } else if( this.hasFocus == false && value == true ) {
                 this.triggerEvent( 'focus' );
             }
+
+            this.isDirty = isDirty;
 
             this.hasFocus = value;
             return this;
@@ -427,9 +430,10 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
             if( typeof callback !== 'function' || typeof parameters === 'undefined' ) {
                 console.error( 'The onFocus parameters must be declared' );
             } else {
-                this.onFocusParameters.owner = this;
-                this.onFocusParameters.callback = callback;
-                this.onFocusParameters.parameters = parameters;
+
+                var parameters = { owner: this, callback: callback, parameters: parameters };
+
+                this.onFocusParameters = parameters;
             }
 
             return this;
