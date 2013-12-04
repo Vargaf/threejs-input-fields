@@ -386,22 +386,24 @@ define(
 
             }
 
+            // Setting the focused element for the vey first time
+
             if( typeof newFocusedElement.object == 'undefined' ) {
 
                 // For sprite inputFields "outside" the scene
                 newFocusedElement = this.inputsLoaded[ newFocusedElement.id ];
-                newFocusedElement.setHasFocus( true );
-                this.cursorElement.setVisible( true );
                 this.focusedElement = newFocusedElement.id;
+                newFocusedElement.setHasFocus( true );
+                newFocusedElement.makeTextSprite();
 
             } else {
 
                 newFocusedElement = this.inputsLoaded[ newFocusedElement.object.id ];
-                newFocusedElement.setHasFocus( true );
                 this.focusedElement = newFocusedElement.id;
+                newFocusedElement.setHasFocus( true );
+                newFocusedElement.makeTextSprite();
 
             }
-
 
             return this;
 

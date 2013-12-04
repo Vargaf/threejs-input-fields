@@ -252,8 +252,11 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
 
         setHasFocus: function( value ) {
 
-            var isDirty = this.isDirty;
             this.isDirty = true;
+
+            if( value == true && this.hasCursor() ) {
+                this.getInputCursor().setVisible( true );
+            }
 
             if( this.hasFocus == true && value == false ) {
                 this.triggerEvent( 'blur' );
@@ -261,9 +264,10 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                 this.triggerEvent( 'focus' );
             }
 
-            this.isDirty = isDirty;
-
             this.hasFocus = value;
+            this.drawInputElement();
+            this.isDirty = false;
+
             return this;
 
         },
