@@ -72,9 +72,6 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
 
             this.render();
 
-            window.addEventListener( 'resize', this.onWindowResize, false );
-
-
         },
 
         render: function(){
@@ -209,17 +206,29 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
 
         onWindowResize: function() {
 
-            canvasElementThis.camera.aspect = canvasElementThis.getCanvasWidth() / canvasElementThis.getCanvasHeight();
+            var domElement = canvasElementThis.getRenderer().domElement;
+            console.log( domElement.clientHeight );
+
+            canvasElementThis.camera.aspect = domElement.clientWidth / domElement.clientHeight;
             canvasElementThis.camera.updateProjectionMatrix();
 
-            canvasElementThis.cameraOrtho.right = canvasElementThis.getCanvasWidth();
-            canvasElementThis.cameraOrtho.top = canvasElementThis.getCanvasHeight();
+            canvasElementThis.cameraOrtho.right = domElement.clientWidth;
+            canvasElementThis.cameraOrtho.top = domElement.clientHeight;
             canvasElementThis.cameraOrtho.updateProjectionMatrix();
 
             canvasElementThis.inputManager.updateOrthographicInputFieldsPositions();
 
-            canvasElementThis.renderer.setSize( canvasElementThis.getCanvasWidth(), canvasElementThis.getCanvasHeight() );
+            canvasElementThis.renderer.setSize( domElement.clientWidth, domElement.clientHeight );
 
+        },
+
+        getRenderer: function() {
+            return this.renderer;
+        },
+
+        setRenderer: function( renderer ) {
+            this.renderer = renderer;
+            return this;
         }
     });
 
