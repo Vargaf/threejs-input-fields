@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome1">
+
+        <title>Basic - Examples - Threejs Input Fields</title>
+
+        <meta name="description" content="To add a input-form-like fields inside threejs projects">
+        <meta name="viewport" content="width=device-width">
+
+        <link rel="stylesheet" href="css/style.css" type="text/css" />
+        <script type="text/javascript" src="../vendors/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="../vendors/underscore-amd/underscore.js"></script>
+        <script type="text/javascript" src="../vendors/backbone-amd/backbone.js"></script>
+        <script type="text/javascript" src="../vendors/threejs/build/three.min.js"></script>
+        <script type="text/javascript" src="../vendors/threejs/examples/js/Detector.js"></script>
+        <script type="text/javascript" src="../vendors/threejs/examples/js/controls/OrbitControls.js"></script>
+        <script type="text/javascript" src="../vendors/mousetrap/mousetrap.js"></script>
+        <script type="text/javascript" src="../vendors/threejs-input-fields/dist/threejsInputFields.js"></script>
+    </head>
+
+    <body style="margin: 0 auto;">
+
+        <div id="canvas-content"></div>
+
+
+        <script type="text/javascript">
+
+            var camera, scene, renderer;
+            var cameraOrtho, sceneOrtho;
+            var light;
+            var controls;
+
+            var canvasWidth = window.innerWidth;
+            var canvasHeight = window.innerHeight;
+            var canvasContent = document.getElementById( 'canvas-content' );
+            canvasContent.style.width = canvasWidth + 'px';
+            canvasContent.style.height = canvasHeight + 'px';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+            var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+            if ( havePointerLock ) {
+
+                var element = document.body;
+
+                var pointerlockchange = function ( event ) {
+
+                    if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+
+                        controls.enabled = true;
+
+                    } else {
+
+                        controls.enabled = false;
+
+                    }
+
+                }
+
+                var pointerlockerror = function ( event ) {
+
+                }
+
+                // Hook pointer lock state change events
+                document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+                document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+                document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+                document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+                document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+                document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+                canvasContent.addEventListener( 'click', function ( event ) {
+
+                    // Ask the browser to lock the pointer
+                    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+                    if ( /Firefox/i.test( navigator.userAgent ) ) {
+
+                        var fullscreenchange = function ( event ) {
+
+                            if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+
+                                document.removeEventListener( 'fullscreenchange', fullscreenchange );
+                                document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+
+                                element.requestPointerLock();
+                            }
+
+                        }
+
+                        document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+                        document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+                        element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+                        element.requestFullscreen();
+
+                    } else {
+
+                        element.requestPointerLock();
+
+                    }
+
+                }, false );
+
+            } else {
+
+                canvasContent.removeEventListener( 'click' );
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            cameraOrtho = new THREE.OrthographicCamera( 0, canvasWidth, canvasHeight, 0, - 10, 10 );
+            sceneOrtho = new THREE.Scene();
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera( 45, canvasWidth / canvasHeight, 0.1, 20000 );
+            camera.name = 'camera';
+
+            camera.position.set( 0, 150, 400 );
+            camera.lookAt( scene.position );
+
+            scene.add( camera );
+
+            if( Detector.webgl ){
+
+                renderer = new THREE.WebGLRenderer({
+                    antialias		: true,	                // to get smoother output
+                    preserveDrawingBuffer	: true	        // to allow screenshot
+                });
+
+                renderer.setClearColor( 0x000000, 1 );
+
+                renderer.autoClear = false; // To allow render overlay on top of 3D scene
+
+            } else {
+
+                renderer = new THREE.CanvasRenderer();
+
+            }
+
+            light = new THREE.AmbientLight( 0x404040 ); // soft white light
+            light.name = "light";
+            scene.add( light );
+
+            renderer.setSize( canvasWidth, canvasHeight );
+
+            controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+            canvasContent.appendChild( renderer.domElement );
+
+            window.addEventListener( 'resize', onWindowResize, false );
+            document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+            document.addEventListener( 'click', onDocumentMouseClick, false );
+
+
+
+            //
+            //
+            //  CUSTOM
+            //
+            //
+
+            var group = new THREE.Object3D();
+
+            // FLOOR
+            var floorTexture = new THREE.ImageUtils.loadTexture( 'img/checkerboard.jpg' );
+            floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+            floorTexture.repeat.set( 10, 10 );
+            var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+            var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+            var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.position.y = -0.5;
+            floor.rotation.x = Math.PI / 2;
+            floor.name = "Checkerboard Floor";
+            floor.id = "CheckerboardFloor";
+            group.add(floor);
+
+            // SKYBOX/FOG
+            var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+            var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x9999ff, side: THREE.BackSide } );
+            var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+            group.add(skyBox);
+
+            // CUBE
+            var cubeGeometry = new THREE.CubeGeometry( 100, 100, 100 );
+            var cubeMaterial = new THREE.MeshNormalMaterial();
+            cube = new THREE.Mesh( cubeGeometry, cubeMaterial );
+            cube.position.set(0,50,0);
+            cube.name = "Cube";
+            cube.id = "Cube";
+            group.add(cube);
+
+            scene.add( group );
+
+            var inputManager = new threejsInputFields( { 'camera': camera, 'canvasWidth': canvasWidth, 'canvasHeight': canvasHeight } );
+            var orthographicElement = true;
+
+            var firstTextInput = inputManager
+                    .create( 'text', 'first-text', orthographicElement )
+                    .setValue( 'First text' )
+                    .setFontSize( 40 )
+                    .setBorderSize( 2 )
+                    .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_LEFT );
+            sceneOrtho.add( firstTextInput.getElement() );
+
+            var thirdTextInput = inputManager
+                    .create( 'text', 'third-text' )
+                    .setValue( 'Third text' )
+                    .setFontSize( 20 )
+                    .setBorderSize( 2 )
+                    .setInputPosition( 50, 100, 0 );
+            scene.add( thirdTextInput.getElement() );
+
+
+            function onWindowResize() {
+
+                camera.aspect = canvasWidth / canvasHeight;
+                camera.updateProjectionMatrix();
+
+                cameraOrtho.right = canvasWidth;
+                cameraOrtho.top = canvasHeight;
+                cameraOrtho.updateProjectionMatrix();
+
+                renderer.setSize( canvasWidth, canvasHeight );
+
+            }
+
+            function onDocumentMouseMove( event ) {
+                inputManager.onDocumentMouseMove( event );
+            }
+
+            function onDocumentMouseClick( event ) {
+                inputManager.onDocumentMouseClick( event );
+            }
+
+            var render = function () {
+                requestAnimationFrame(render);
+
+                inputManager.requestAnimationFrame();
+                controls.update();
+                renderer.clear();
+                renderer.render(scene, camera);
+                renderer.render( sceneOrtho, cameraOrtho );
+            };
+
+            render();
+
+        </script>
+
+
+    </body>
+
+</html>

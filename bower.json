@@ -1,0 +1,12 @@
+{
+    "name": "threejs-input-fields-github-page",
+    "version": "0.1.0",
+    "ignore": [
+        ".jshintrc",
+        "**/*.txt"
+    ],
+    "dependencies": {
+        "threejs-input-fields": "master",
+        "threex": "master"
+    }
+}
