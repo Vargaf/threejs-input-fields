@@ -1,7 +1,7 @@
 {
     "name": "threejs-input-fields",
     "homepage": "http://vargaf.github.io/threejs-input-fields/",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "_source": "git://github.com/Vargaf/threejs-input-fields.git",
     "ignore": [
         ".jshintrc",
