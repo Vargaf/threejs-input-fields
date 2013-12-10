@@ -106,8 +106,6 @@ define(
             Mousetrap.bind( 'end',          inputManagerClassTHIS.inputCursorEnd );
             Mousetrap.bind( 'home',          inputManagerClassTHIS.inputCursorStart );
 
-            window.addEventListener( 'resize', this.onWindowResize, false );
-
         },
 
         shiftRelease: function() {

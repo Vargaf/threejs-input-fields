@@ -207,7 +207,6 @@ define( [ 'backbone', 'jquery', 'threejs', 'detector', 'orbitControls', 'inputFi
         onWindowResize: function() {
 
             var domElement = canvasElementThis.getRenderer().domElement;
-            console.log( domElement.clientHeight );
 
             canvasElementThis.camera.aspect = domElement.clientWidth / domElement.clientHeight;
             canvasElementThis.camera.updateProjectionMatrix();

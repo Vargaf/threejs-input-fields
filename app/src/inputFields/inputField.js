@@ -398,8 +398,6 @@ define([ 'backbone', 'threejs' ], function( Backbone, THREE ) {
                     offset.y +=  this.getCanvasHeight() * 0.5;
                 }
 
-
-
             }
 
             return offset;
