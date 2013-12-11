@@ -39,139 +39,6 @@
             canvasContent.style.width = canvasWidth + 'px';
             canvasContent.style.height = canvasHeight + 'px';
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            // http://www.html5rocks.com/en/tutorials/pointerlock/intro/
-
-            var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
-
-            if ( havePointerLock ) {
-
-                var element = document.body;
-
-                var pointerlockchange = function ( event ) {
-
-                    if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
-
-                        controls.enabled = true;
-
-                    } else {
-
-                        controls.enabled = false;
-
-                    }
-
-                }
-
-                var pointerlockerror = function ( event ) {
-
-                }
-
-                // Hook pointer lock state change events
-                document.addEventListener( 'pointerlockchange', pointerlockchange, false );
-                document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
-                document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
-
-                document.addEventListener( 'pointerlockerror', pointerlockerror, false );
-                document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
-                document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
-
-                canvasContent.addEventListener( 'click', function ( event ) {
-
-                    // Ask the browser to lock the pointer
-                    element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-
-                    if ( /Firefox/i.test( navigator.userAgent ) ) {
-
-                        var fullscreenchange = function ( event ) {
-
-                            if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
-
-                                document.removeEventListener( 'fullscreenchange', fullscreenchange );
-                                document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
-
-                                element.requestPointerLock();
-                            }
-
-                        }
-
-                        document.addEventListener( 'fullscreenchange', fullscreenchange, false );
-                        document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
-
-                        element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
-
-                        element.requestFullscreen();
-
-                    } else {
-
-                        element.requestPointerLock();
-
-                    }
-
-                }, false );
-
-            } else {
-
-                canvasContent.removeEventListener( 'click' );
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             cameraOrtho = new THREE.OrthographicCamera( 0, canvasWidth, canvasHeight, 0, - 10, 10 );
             sceneOrtho = new THREE.Scene();
 
@@ -214,8 +81,6 @@
             window.addEventListener( 'resize', onWindowResize, false );
             document.addEventListener( 'mousemove', onDocumentMouseMove, false );
             document.addEventListener( 'click', onDocumentMouseClick, false );
-
-
 
             //
             //
@@ -263,6 +128,7 @@
                     .setValue( 'First text' )
                     .setFontSize( 40 )
                     .setBorderSize( 2 )
+                    .onBlur( setValueToOutput, '' )
                     .setInputPosition( 0, 0, 0, inputManager.POSITION_TOP_LEFT );
             sceneOrtho.add( firstTextInput.getElement() );
 
@@ -271,11 +137,56 @@
                     .setValue( 'Third text' )
                     .setFontSize( 20 )
                     .setBorderSize( 2 )
+                    .onBlur( setValueToOutput, '' )
                     .setInputPosition( 50, 100, 0 );
             scene.add( thirdTextInput.getElement() );
 
+            var outputField = inputManager
+                    .create( 'text', 'output-field', orthographicElement )
+                    .setValue( 'Output field' )
+                    .setFontSize( 20 )
+                    .setBorderSize( 2 )
+                    .setReadOnly( true )
+                    .setInputFieldSize( 300 )
+                    .setInputPosition( 0, -10, 0, inputManager.POSITION_BOTTOM_CENTER );
+            sceneOrtho.add( outputField.getElement() );
+
+            // To set the input value to the "output-field" when an input lost its focus
+            function setValueToOutput( event ) {
+
+                outputField.setValue( event.object.getInputValue() );
+
+            }
+
+
+            var element = document.body;
+
+            function fullscreenTrigger() {
+                var fullscreenchange = function ( event ) {
+
+                    if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+
+                        document.removeEventListener( 'fullscreenchange', fullscreenchange );
+                        document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+                    }
+
+                }
+
+                document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+                document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+                element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+                element.requestFullscreen();
+            }
 
             function onWindowResize() {
+
+                // Set the focus into the iframe taht willl load this content
+                window.focus()
+
+                var canvasWidth = window.innerWidth;
+                var canvasHeight = window.innerHeight;
 
                 camera.aspect = canvasWidth / canvasHeight;
                 camera.updateProjectionMatrix();
@@ -286,6 +197,10 @@
 
                 renderer.setSize( canvasWidth, canvasHeight );
 
+                inputManager.setCanvasWidth( canvasWidth );
+                inputManager.setCanvasHeight( canvasHeight );
+                inputManager.updateOrthographicInputFieldsPositions();
+
             }
 
             function onDocumentMouseMove( event ) {
@@ -293,6 +208,7 @@
             }
 
             function onDocumentMouseClick( event ) {
+                window.focus()
                 inputManager.onDocumentMouseClick( event );
             }
 
