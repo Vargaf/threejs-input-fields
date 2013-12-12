@@ -8,6 +8,7 @@
               content="Input fields for Threejs : To add input-form-like fields inside threejs projects"/>
 
         <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+        <link rel="stylesheet" href="https://stackedit.io/res-min/themes/base.css" />
 
         <title>Input fields for Threejs</title>
     </head>
@@ -39,118 +40,84 @@
         <!-- MAIN CONTENT -->
         <div id="main_content_wrap" class="outer">
             <section id="main_content" class="inner">
-                <h3>
-                    <a name="threejs-input-fields" class="anchor" href="#threejs-input-fields"><span
-                            class="octicon octicon-link"></span></a>
-                    Welcome to Input fields for Threejs.
-                </h3>
+                <h3 id="welcome-to-input-fields-for-threejs">Welcome to Input fields for Threejs.</h3>
 
-                <p>
-                    The aim for this library is to enable de use of form input fields on the Threejs environment.
-                </p>
+                <p>The aim for this library is to enable de use of input form fields on Threejs environment.</p>
 
-                <p>
-                    This library is being developed using:
-                    <ul>
-                        <li><a href="http://backbonejs.org/" target="_blank">Backbonejs</a>, to get a structured code with a MVC development</li>
-                        <li><a href="http://requirejs.org/" target="_blank">Require.js</a>, a javaScript file and module loader</li>
-                        <li><a href="http://bower.io/" target="_blank">Bower</a>, to get an manage all the needed libraries to develop this one</li>
-                    </ul>
-                </p>
+                <p>This library is being developed using:</p>
 
-                <h3>
-                    <a name="how-to-install" class="anchor" href="#how-to-install"><span
-                            class="octicon octicon-link"></span></a>
-                    How to install
-                </h3>
+                <ul>
+                    <li><a href="http://backbonejs.org" title="Bakbone's Homepage">Backbone.js</a>, to get a structured code with a MVC development</li>
+                    <li><a href="http://requirejs.org" title="Require's Homepage">Require.js</a>, a javaScript file and module loader</li>
+                    <li><a href="http://bower.io" title="Bowers's Homepage">Bower</a>, to get an manage all the needed libraries to develop this one</li>
+                </ul>
 
-                <p>
-                    You can <a href="https://github.com/Vargaf/threejsInputFields">download</a> it from Github or fork it.
-                    <br>
-                    You can also get it by bower.
-                    <pre><code>$bower install threejsinputfields</code></pre>
-                </p>
+                <h3 id="how-to-install">How to install</h3>
 
-                <h3>
-                    <a name="live-example" class="anchor" href="#live-example"><span
-                            class="octicon octicon-link"></span></a>
-                    Live example
-                </h3>
+                <p>You can <a href="https://github.com/Vargaf/threejsInputFields" title="threejsInputFileds Homepage">download</a> it from Github or fork it.</p>
 
-                <div id="live-example" >
-                    <iframe src="http://localhost/threejsinputfields/examples/basic.html" id="iframe-live-demo" allowfullscreen webkitallowfullscreen mozallowfullscreen width="660" height="495"></iframe>
+                <p>You can also get it by bower:</p>
+
+                <pre class="prettyprint prettyprinted" style=""><code><span class="pln">$bower install threejsinputfields</span></code></pre>
+
+                <h3 id="live-example">Live example</h3>
+
+                <div id="live-example">
+                    <iframe src="http://vargaf.github.io/threejs-input-fields/examples/basic.html" id="iframe-live-demo" allowfullscreen="" webkitallowfullscreen="" mozallowfullscreen="" width="660" height="495"></iframe>
                 </div>
 
-                <a href="javascript::return false;" onclick="document.getElementById('iframe-live-demo').contentWindow.fullscreenTrigger()">Full screen</a>
+                <p><a href="javascript::return false;" onclick="document.getElementById('iframe-live-demo').contentWindow.fullscreenTrigger()">Full screen</a></p>
 
+                <h3 id="usage">Usage</h3>
 
-                <p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+                <p>Due to the  used libraries to develop this one first we need to add all the needed javascript files:</p>
 
-                <h3>
-                    <a name="designer-templates" class="anchor" href="#designer-templates"><span
-                            class="octicon octicon-link"></span></a>
-                    Designer Templates
-                </h3>
+<pre class="prettyprint prettyprinted" style=""><code class="language-javascript"><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"../js/jquery.min.js"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln">
+</span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"../js/underscore.js"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln">
+</span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"../js/backbone.js"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln">
+</span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"../js/OrbitControls.js"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln">
+</span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"../js/mousetrap.js"</span><span class="tag">&gt;&lt;/script&gt;</span><span class="pln">
+</span><span class="tag">&lt;script</span><span class="pln"> </span><span class="atn">type</span><span class="pun">=</span><span class="atv">"text/javascript"</span><span class="pln"> </span><span class="atn">src</span><span class="pun">=</span><span class="atv">"../js/threejsInputFields.js"</span><span class="tag">&gt;&lt;/script&gt;</span></code></pre>
 
-                <p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse
-                    through
-                    them. You can easily go back to edit your page before publishing. After publishing your page, you
-                    can
-                    revisit the page generator and switch to another theme. Your Page content will be preserved if it
-                    remained
-                    markdown format.
-                </p>
+                <p>You may think that this is a huge dependences list for a library, but is the best way to be more modular.</p>
 
-                <h3>
-                    <a name="rather-drive-stick" class="anchor" href="#rather-drive-stick"><span
-                            class="octicon octicon-link"></span></a>
-                    Rather Drive Stick?
-                </h3>
+                <p>Lets work, we begin creating the input manager to handle the input fields behaviours:</p>
 
-                <p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your
-                    repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages
-                    support
-                    Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll
-                    makes it
-                    easy to create site-wide headers and footers without having to copy them across every page. It also
-                    offers
-                    intelligent blog support and other advanced templating features.
-                </p>
+<pre class="prettyprint prettyprinted" style=""><code class="language-javascript"><span class="pln"> </span><span class="kwd">var</span><span class="pln"> inputManager </span><span class="pun">=</span><span class="pln"> </span><span class="kwd">new</span><span class="pln"> threejsInputFields</span><span class="pun">(</span><span class="pln"> </span><span class="pun">{</span><span class="pln">
+    </span><span class="str">'camera'</span><span class="pun">:</span><span class="pln"> camera</span><span class="pun">,</span><span class="pln">                           </span><span class="com">// Threejs camera</span><span class="pln">
+    </span><span class="str">'canvasWidth'</span><span class="pun">:</span><span class="pln"> canvasWidth</span><span class="pun">,</span><span class="pln">                 </span><span class="com">// Scene witdth</span><span class="pln">
+    </span><span class="str">'canvasHeight'</span><span class="pun">:</span><span class="pln"> canvasHeight </span><span class="pun">}</span><span class="pln"> </span><span class="pun">);</span><span class="pln">           </span><span class="com">// Scene hight</span><span class="pln">
+</span><span class="pun">}</span></code></pre>
 
-                <h3>
-                    <a name="authors-and-contributors" class="anchor" href="#authors-and-contributors"><span
-                            class="octicon octicon-link"></span></a>
-                    Authors and Contributors
-                </h3>
+                <p>Add first input element ( at the moment only input text type are available ) and this one goes on and orthographic scene:</p>
 
-                <p>You can
-                    <a href="https://github.com/blog/821" class="user-mention">@mention</a>
-                    a GitHub username to generate
-                    a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's
-                    GitHub
-                    Profile. For example: In 2007, Chris Wanstrath (
-                    <a href="https://github.com/defunkt" class="user-mention">@defunkt</a>
-                    ),
-                    PJ Hyett (
-                    <a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>
-                    ), and Tom Preston-Werner
-                    (
-                    <a href="https://github.com/mojombo" class="user-mention">@mojombo</a>
-                    ) founded GitHub.
-                </p>
+<pre class="prettyprint prettyprinted" style=""><code class="language-javascript"><span class="kwd">var</span><span class="pln"> firstTextInput </span><span class="pun">=</span><span class="pln"> inputManager
+    </span><span class="com">// Input type, id, flag to know if the input is on an orthographic scene</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">create</span><span class="pun">(</span><span class="pln"> </span><span class="str">'text'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'first-input'</span><span class="pun">,</span><span class="pln"> </span><span class="kwd">true</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">setValue</span><span class="pun">(</span><span class="pln"> </span><span class="str">'First text'</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">setFontSize</span><span class="pun">(</span><span class="pln"> </span><span class="lit">40</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">setBorderSize</span><span class="pun">(</span><span class="pln"> </span><span class="lit">2</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">setInputPosition</span><span class="pun">(</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pun">,</span><span class="pln"> inputManager</span><span class="pun">.</span><span class="pln">POSITION_TOP_LEFT </span><span class="pun">);</span><span class="pln">
 
-                <h3>
-                    <a name="support-or-contact" class="anchor" href="#support-or-contact"><span
-                            class="octicon octicon-link"></span></a>
-                    Support or Contact
-                </h3>
+</span><span class="com">// Add the input into the ortographic scene</span><span class="pln">
+sceneOrtho</span><span class="pun">.</span><span class="pln">add</span><span class="pun">(</span><span class="pln"> firstTextInput</span><span class="pun">.</span><span class="pln">getElement</span><span class="pun">()</span><span class="pln"> </span><span class="pun">);</span></code></pre>
 
-                <p>Having trouble with Pages? Check out the documentation at
-                    <a href="http://help.github.com/pages">http://help.github.com/pages</a>
-                    or contact
-                    <a href="mailto:support@github.com">support@github.com</a>
-                    and we’ll help you sort it out.
-                </p>
+                <p>Second input element, but this time inside the 3D space:</p><div class="se-section-delimiter"></div>
+
+<pre class="prettyprint prettyprinted" style=""><code class="language-javascript"><span class="kwd">var</span><span class="pln"> secondTextInput </span><span class="pun">=</span><span class="pln"> inputManager
+    </span><span class="com">// Input type, id, this input goes on a normal scene ( value = false )</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">create</span><span class="pun">(</span><span class="pln"> </span><span class="str">'text'</span><span class="pun">,</span><span class="pln"> </span><span class="str">'second-input'</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">setValue</span><span class="pun">(</span><span class="pln"> </span><span class="str">'Third text'</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">setFontSize</span><span class="pun">(</span><span class="pln"> </span><span class="lit">20</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">setBorderSize</span><span class="pun">(</span><span class="pln"> </span><span class="lit">2</span><span class="pln"> </span><span class="pun">)</span><span class="pln">
+    </span><span class="pun">.</span><span class="pln">setInputPosition</span><span class="pun">(</span><span class="pln"> </span><span class="lit">50</span><span class="pun">,</span><span class="pln"> </span><span class="lit">100</span><span class="pun">,</span><span class="pln"> </span><span class="lit">0</span><span class="pln"> </span><span class="pun">);</span><span class="pln">
+
+</span><span class="com">// This input goes inside a normal scene</span><span class="pln">
+scene</span><span class="pun">.</span><span class="pln">add</span><span class="pun">(</span><span class="pln"> secondTextInput</span><span class="pun">.</span><span class="pln">getElement</span><span class="pun">()</span><span class="pln"> </span><span class="pun">);</span></code></pre>
+
+                <p>Finally, to update the inputs we have to refresh them on every each requestAnimationFrame call</p><div class="se-section-delimiter"></div>
+
+                <pre class="prettyprint prettyprinted" style=""><code class="language-javascript"><span class="pln">inputManager</span><span class="pun">.</span><span class="pln">requestAnimationFrame</span><span class="pun">();</span></code></pre>
             </section>
         </div>
 
